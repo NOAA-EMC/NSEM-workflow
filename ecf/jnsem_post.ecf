@@ -1,0 +1,65 @@
+#!/bin/bash --login
+
+# Contributors: Andre van der Westhuysen
+#
+# ----------------------------------------------------------- 
+# ------------- Program Description and Details ------------- 
+# ----------------------------------------------------------- 
+#
+# Job Card to set the resources required for a NWPS run
+#
+# ----------------------------------------------------------- 
+
+#SBATCH --account=coastal
+#SBATCH --job-name=jnsem_post
+#SBATCH -q batch
+#SBATCH --time=00:30:00
+#SBATCH --ntasks=1
+#SBATCH --mail-user=andre.vanderwesthuysen@noaa.gov
+#SBATCH --mail-type=ALL
+#SBATCH --output=jnsem_post.out.log
+#SBATCH --error=jnsem_post.err.log
+
+source ${ROOTDIR}/modulefiles/hera/ESMF_NUOPC
+
+module list
+
+export model="nsem"
+export MODEL=${model^^}
+
+export envir="para"
+
+export DEVWCOSS_USER=$(whoami)
+export COMROOT=/scratch2/NCEPDEV/stmp1/${USER}/data/com
+export CASEROOT=/scratch2/NCEPDEV/stmp1/${USER}/data
+
+#Dev environment value for $job and $jobid
+export job=pnsem_post
+export jobid=pnwps_post.$$
+
+#Dev environment jlogfile
+#mkdir -p ${COMROOT}/logs/${envir}
+#export jlogfile=${COMROOT}/logs/${envir}/jlogfile.${job}
+
+export NWROOT=${NSEMdir}
+
+${NWROOT}/jobs/J${MODEL}_POST
+
+#%manual
+################################################################################
+#TASKSCRIPT DOCUMENTATION BLOCK
+#TASKSCRIPT:     jnsem_post
+#LAST MODIFIER:  Andre van der Westhuysen
+#ORGANIZATION:   IMSG at NOAA/NCEP/EMC
+#DATE:           May 2020
+#FULL NAME:      /nsem/jnsem
+#PURPOSE:        To execute job that post-processes output of the ADC-WW3-NWM model
+#JOB SCRIPT CALLED: ${NWROOT}/jobs/JNSEM ==>
+#                            ${NWROOT}/scripts/exnsem_post.sh.ecf
+#################################################################################
+######################################################################
+# Job specific troubleshooting instructions:
+#  see generic troubleshoot manual page
+#
+######################################################################
+#%end

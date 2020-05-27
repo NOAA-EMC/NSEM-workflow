@@ -1,0 +1,12 @@
+#!/bin/bash
+echo "============================================================="
+echo "=                                                            "
+echo "=         RUNNING NSEM FOR STORM: ${STORM}                   "
+echo "=         RUN TYPE: ${RUN_TYPE}                              "
+echo "=                                                            "
+echo "============================================================="
+# 
+python ${USHnsem}/postproc-nsemodel.py
+
+echo "Post-procession completed"
+exit 0

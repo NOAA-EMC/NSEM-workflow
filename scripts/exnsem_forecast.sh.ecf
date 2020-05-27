@@ -1,0 +1,12 @@
+#!/bin/bash
+echo "============================================================="
+echo "=                                                            "
+echo "=         RUNNING NSEM FOR STORM: ${STORM}                   "
+echo "=         RUN TYPE: ${RUN_TYPE}                              "
+echo "=                                                            "
+echo "============================================================="
+#
+${USHnsem}/run_nems.sh
+
+echo "Forcast completed"
+exit 0

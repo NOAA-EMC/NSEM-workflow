@@ -1,0 +1,65 @@
+#!/bin/bash --login
+
+# Contributors: Andre van der Westhuysen
+#
+# ----------------------------------------------------------- 
+# ------------- Program Description and Details ------------- 
+# ----------------------------------------------------------- 
+#
+# Job Card to set the resources required for a NWPS run
+#
+# ----------------------------------------------------------- 
+
+#SBATCH --account=coastal
+#SBATCH --job-name=jnsem_prep
+#SBATCH -q batch
+#SBATCH --time=08:00:00
+#SBATCH --ntasks=1441
+#SBATCH --mail-user=andre.vanderwesthuysen@noaa.gov
+#SBATCH --mail-type=ALL
+#SBATCH --output=jnsem_forecast.out.log
+#SBATCH --error=jnsem_forecast.err.log
+
+source ${ROOTDIR}/modulefiles/hera/ESMF_NUOPC
+
+module list
+
+export model="nsem"
+export MODEL=${model^^}
+
+export envir="para"
+
+export DEVWCOSS_USER=$(whoami)
+export COMROOT=/scratch2/NCEPDEV/stmp1/${USER}/data/com
+export CASEROOT=/scratch2/NCEPDEV/stmp1/${USER}/data
+
+#Dev environment value for $job and $jobid
+export job=pnsem_forecast
+export jobid=pnwps_forecast.$$
+
+#Dev environment jlogfile
+#mkdir -p ${COMROOT}/logs/${envir}
+#export jlogfile=${COMROOT}/logs/${envir}/jlogfile.${job}
+
+export NWROOT=${NSEMdir}
+
+${NWROOT}/jobs/J${MODEL}_FORECAST
+
+#%manual
+################################################################################
+#TASKSCRIPT DOCUMENTATION BLOCK
+#TASKSCRIPT:     jnsem_prep
+#LAST MODIFIER:  Andre van der Westhuysen
+#ORGANIZATION:   IMSG at NOAA/NCEP/EMC
+#DATE:           May 2020
+#FULL NAME:      /nsem/jnsem
+#PURPOSE:        To execute the job that preps the input files for ADC-WW3-NWM model
+#JOB SCRIPT CALLED: ${NWROOT}/jobs/JNSEM ==>
+#                            ${NWROOT}/scripts/exnsem_prep.sh.ecf
+#################################################################################
+######################################################################
+# Job specific troubleshooting instructions:
+#  see generic troubleshoot manual page
+#
+######################################################################
+#%end

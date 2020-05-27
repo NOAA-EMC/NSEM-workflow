@@ -1,0 +1,140 @@
+#!/bin/bash --login
+# ----------------------------------------------------------- 
+# UNIX Shell Script File
+# Tested Operating System(s): RHEL 7
+# Tested Run Level(s): 
+# Shell Used: BASH shell
+# Original Author(s): Andre van der Westhuysen
+# File Creation Date: 05/15/2020
+# Date Last Modified:
+#
+# Version control: 1.00
+#
+# Support Team:
+#
+# Contributors: 
+#
+# ----------------------------------------------------------- 
+# ------------- Program Description and Details ------------- 
+# ----------------------------------------------------------- 
+#
+# Job Card to set the resources required for a NWPS run
+#
+# ----------------------------------------------------------- 
+
+date
+set -xa
+
+# Check for env variables
+if [ "${STORM}" != "shinnecock" ] && 
+   [ "${STORM}" != "ike" ]
+    then 
+    echo "*** ERROR - Your STORM environment variable is not set, or not valid. Valid options are:"
+    echo "shinnecock"
+    echo "ike"
+    exit 1
+fi
+if [ "${RUN_TYPE}" != "tide_spinup" ] && 
+   [ "${RUN_TYPE}" != "tide_baserun" ] &&
+   [ "${RUN_TYPE}" != "best_track2ocn" ] &&
+   [ "${RUN_TYPE}" != "wav&best_track2ocn" ] &&
+   [ "${RUN_TYPE}" != "atm2ocn" ] &&
+   [ "${RUN_TYPE}" != "wav2ocn" ] &&
+   [ "${RUN_TYPE}" != "atm&wav2ocn" ] &&
+   [ "${RUN_TYPE}" != "atm2wav2ocn" ]
+    then 
+    echo "*** ERROR - Your RUN_TYPE environment variable is not set, or not valid. Valid options are:"
+    echo "tide_spinup"
+    echo "tide_baserun"
+    echo "best_track2ocn"
+    echo "wav&best_track2ocn"
+    echo "atm2ocn"
+    echo "wav2ocn"
+    echo "atm&wav2ocn"
+    echo "atm2wav2ocn"
+    exit 1
+fi
+
+export pgmout=OUTPUT.$$
+
+cd /scratch2/NCEPDEV/stmp1/${USER}/data/
+
+PDY="$(date +'%Y%m%d')"
+
+export pgm="NWPS"
+
+export DATA=/scratch2/NCEPDEV/stmp1/${USER}/data/${STORM}.${PDY}
+export GESROOT=/scratch2/NCEPDEV/stmp1/${USER}/data/nwges
+
+cd $DATA
+
+####################################
+# Specify NET and RUN Name and model
+####################################
+export NET=${model}
+export RUN=$(echo ${job}|awk -F"_" '{print $2}')
+
+####################################
+# SENDECF  - Flag Events on ECFLOW
+# SENDCOM  - Copy Files From TMPDIR to $COMOUT
+# SENDDBN  - Issue DBNet Client Calls
+####################################
+export SENDCOM=${SENDCOM:-YES}
+export SENDECF=${SENDECF:-YES}
+export SENDDBN=${SENDDBN:-NO}
+
+####################################
+# Specify Execution Areas
+####################################
+export HOMEnsem=${NWROOT}
+export FIXnsem=${FIXnsem:-${HOMEnsem}/fix}
+export EXECnsem=${EXECnsem:-${HOMEnsem}/exec}
+export SORCnsem=${SORCnsem:-${HOMEnsem}/sorc}
+export PARMnsem=${PARMnsem:-${HOMEnsem}/parm}
+export USHnsem=${USHnsem:-${HOMEnsem}/ush}
+export PMnsem=${PMnsem:-${USHnsem}/pm}
+export BATHYdb=${BATHYdb:-${FIXnsem}/bathy_db}
+export SHAPEFILEdb=${SHAPEFILEdb:-${FIXnwps}/shapefile_db}
+
+# Set processing DIRs here
+export INPUTdir=${INPUTdir:-${DATA}/input}
+export RUNdir=${RUNdir:-${DATA}/run}
+export TMPdir=${TMPdir:-${DATA}/tmp}
+export LOGdir=${LOGdir:-${DATA}/logs}
+
+# Set NWPS run conditions
+export DEBUGGING=${DEBUGGING:-TRUE}
+export DEBUG_LEVEL=${DEBUG_LEVEL:-1}
+export ISPRODUCTION=${ISPRODUCTION:-TRUE}
+export SITETYPE=${SITETYPE:-EMC}
+
+##############################################
+# Define COM directory
+##############################################
+export COMOUT=${COMROOT}/${NET}/${envir}/${STORM}.${PDY}
+export GESOUT=${GESROOT}/${envir}/${NET}.${PDY}
+export GESIN=${GESROOT}/${envir}/${NET}.${PDY}
+export GESINm1=${GESROOT}/${envir}/${NET}.${PDYm1}
+export GESINm2=${GESROOT}/${envir}/${NET}.${PDYm2}
+
+#startmsg
+
+##############################################
+# Execute the script
+${HOMEnsem}/scripts/exnsem_post.sh.ecf
+##############################################
+
+#msg="JOB $job HAS COMPLETED NORMALLY."
+#postmsg $jlogfile "$msg"
+#
+#if [ -e $pgmout ]; then
+#    cat $pgmout
+#fi
+#
+#cd $DATAROOT
+#
+#if [ "$KEEPDATA" != YES ]; then
+#    rm -rf $DATA
+#fi
+#
+date
