@@ -1,4 +1,4 @@
-Place NEMS.x and auxiliary program binaries here. Required files are:
+Place NEMS.x and auxiliary binaries here. Required files are:  
 adcprep  
 tidefac  
 ww3_ounf  
