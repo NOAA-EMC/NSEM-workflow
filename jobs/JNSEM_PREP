@@ -63,7 +63,7 @@ PDY="$(date +'%Y%m%d')"
 
 export pgm="NWPS"
 
-export DATA=/scratch2/NCEPDEV/stmp1/${USER}/data/${STORM}.${PDY}
+export DATA=/scratch2/NCEPDEV/stmp1/${USER}/data/${STORM}.${RUN_TYPE}.${PDY}
 export GESROOT=/scratch2/NCEPDEV/stmp1/${USER}/data/nwges
 
 mkdir -p $DATA
@@ -112,7 +112,7 @@ export SITETYPE=${SITETYPE:-EMC}
 ##############################################
 # Define COM directory
 ##############################################
-export COMOUT=${COMROOT}/${NET}/${envir}/${STORM}.${PDY}
+export COMOUT=${COMROOT}/${NET}/${envir}/${STORM}.${RUN_TYPE}.${PDY}
 export GESOUT=${GESROOT}/${envir}/${NET}.${PDY}/${STORM}
 export GESIN=${GESROOT}/${envir}/${NET}.${PDY}/${STORM}
 export GESINm1=${GESROOT}/${envir}/${NET}.${PDYm1}/${STORM}
