@@ -1,13 +1,13 @@
 # NSEM-workflow
 
-1. Overview  
+## Overview  
   
 This is a workflow developed to perform post-storm assessments for NOAA's COASTAL Act 
 using the NEMS/NUOPC/ESMF coupling framework. The coupled model components managed by 
 this workflow is ADCIRC, unstructured WAVEWATCH III, and the National Water Model. 
 Atmospheric forcing is provided by a data model, reading pre-prepared fields.  
   
-2. Set up system  
+## Set up system  
   
 After cloning the codebase, set up an environment variable `$NSEMdir` that points to the 
 location of the cloned code. The executable folder `$NSEMdir/exec/` should contain the following 
@@ -27,7 +27,7 @@ the application in the following root environment variables:
     $GESROOT  
     $COMROOT  
   
-3. Perform a post-storm assessment  
+## Perform a post-storm assessment  
   
 a) Set the storm for which to perform the assessment:  
 
