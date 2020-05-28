@@ -35,7 +35,7 @@ def test_90_accuracy(model, observations, plotflag=False, direc="", label="model
    if np.mean((mod1-obs1)/obs1) > 0:
       # Alternative hypothesis: mu_drel > 0.1 (right-tailed test)
       print("Testing Ha: mu_drel > "+str(m))
-      results = stats.ttest_1samp((mod1-obs1)/obs1, m)
+      results = stats.ttest_1samp((mod1-obs1)/np.maximum(obs1,0.01), m)
       #print(results[0],results[1])
       if (results[0] > 0) & (results[1]/2 < alpha):
          pvalue1 = results[1]/2
@@ -54,7 +54,7 @@ def test_90_accuracy(model, observations, plotflag=False, direc="", label="model
    else:
       # Alternative hypothesis: mu_drel < -0.1 (left-tailed test)
       print("Testing Ha: mu_drel < "+str(-m))
-      results = stats.ttest_1samp((mod1-obs1)/obs1, -m)
+      results = stats.ttest_1samp((mod1-obs1)/np.maximum(obs1,0.01), -m)
       #print(results[0],results[1])
       if (results[0] < 0) & (results[1]/2 < alpha):
          pvalue1 = results[1]/2
@@ -76,7 +76,7 @@ def test_90_accuracy(model, observations, plotflag=False, direc="", label="model
    if np.mean((mod2-obs2)/obs2) > 0:
       # Alternative hypothesis: mu_drel > 0.1 (right-tailed test)
       print("Testing Ha: mu_drel > "+str(m))
-      results = stats.ttest_1samp((mod2-obs2)/obs2, m)
+      results = stats.ttest_1samp((mod2-obs2)/np.maximum(obs2,0.01), m)
       #print(results[0],results[1])
       if (results[0] > 0) & (results[1]/2 < alpha):
          pvalue2 = results[1]/2
@@ -95,7 +95,7 @@ def test_90_accuracy(model, observations, plotflag=False, direc="", label="model
    else:
       # Alternative hypothesis: mu_drel < -0.1 (left-tailed test)
       print("Testing Ha: mu_drel < "+str(-m))
-      results = stats.ttest_1samp((mod2-obs2)/obs2, -m)
+      results = stats.ttest_1samp((mod2-obs2)/np.maximum(obs2,0.01), -m)
       #print(results[0],results[1])
       if (results[0] < 0) & (results[1]/2 < alpha):
          pvalue2 = results[1]/2
