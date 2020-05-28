@@ -50,7 +50,7 @@ run_option = os.getenv('RUN_TYPE')
 #Date settings
 tide_spin_start_date = datetime.datetime(2008,8,23,0,0,0) # this is also tde_ref_date (tide_fact calc)
 tide_spin_end_date   = tide_spin_start_date + datetime.timedelta(days=12.5)
-wave_spin_end_date   = tide_spin_start_date + datetime.timedelta(days=27)
+wave_spin_end_date   = tide_spin_start_date + datetime.timedelta(days=14)
 #final_end_date      = tide_spin_start_date + datetime.timedelta(days=23.5)
 
 # Folders
