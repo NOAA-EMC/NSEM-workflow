@@ -29,11 +29,11 @@ the application in the following root environment variables:
   
 ## Perform a post-storm assessment  
   
-a) Set the storm for which to perform the assessment:  
+a) Set the storm for which to perform the assessment, e.g.:  
 
     $ setenv STORM shinnecock  
   
-b) Set the type of model run:  
+b) Set the type of model run, e.g.:  
 
     $ setenv RUN_TYPE tide_spinup  
   
@@ -43,7 +43,7 @@ c) Run the prep, forecast and post jobs that comprises the complete model run:
     $ sbatch jnsem_forecast.ecf  
     $ sbatch jnsem_post.ecf  
 
-d) Repeat steps (c) as needed to perform the tidal spinup and subsequently the coupled 
+d) Repeat steps (c) as needed to perform the tidal spinup, and subsequently the coupled 
 model run. For example, a typical sequence is:
 
     $ setenv RUN_TYPE tide_spinup  
@@ -56,7 +56,7 @@ model run. For example, a typical sequence is:
     $ sbatch jnsem_forecast.ecf  
     $ sbatch jnsem_post.ecf  
    
-e) The results of these working directory of these runs are located in the scratch space:   
+e) The working directory of these runs is located in the scratch space:   
    
     ${STORM}.${RUN_TYPE}.${PDY}  
    
