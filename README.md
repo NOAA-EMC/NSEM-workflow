@@ -13,21 +13,21 @@ After cloning the codebase, set up an environment variable $NSEMdir that points 
 location of the cloned code. The executable folder $NSEMdir/exec/ should contain the following 
 binaries from the NEMS app ADC-WW3-NWM-DATM:  
   
-   adcprep  
-   tidefac  
-   ww3_ounf  
-   ww3_grid  
-   ww3_bound  
-   NEMS.x  
+&nbsp;adcprep  
+&nbsp;tidefac  
+&nbsp;ww3_ounf  
+&nbsp;ww3_grid  
+&nbsp;ww3_bound  
+&nbsp;NEMS.x  
   
-In the sub-directories ecf/ and jobs/, set up the location of the scratch space to run 
+In the sub-directories $NSEMdir/ecf/ and $NSEMdir/jobs/, set up the location of the scratch space to run 
 the application in the following root environment variables:  
   
    $DATA  
    $GESROOT  
    $COMROOT  
   
-3. Perform and post-storm assessment  
+3. Perform a post-storm assessment  
   
 a) Set the storm for which to perform the assessment:  
 
@@ -39,22 +39,22 @@ b) Set the type of model run:
   
 c) Run the prep, forecast and post jobs that comprises the complete model run:
 
-   $ sbatch jnsem_prep.ecf
-   $ sbatch jnsem_forecast.ecf
-   $ sbatch jnsem_post.ecf
+   $ sbatch jnsem_prep.ecf  
+   $ sbatch jnsem_forecast.ecf  
+   $ sbatch jnsem_post.ecf  
 
 d) Repeat steps (c) as needed to perform the tidal spinup and subsequently the coupled 
 model run. For example, a typical sequence is:
 
-   $ setenv RUN_TYPE tide_spinup
-   $ sbatch jnsem_prep.ecf
-   $ sbatch jnsem_forecast.ecf
-   $ sbatch jnsem_post.ecf
+   $ setenv RUN_TYPE tide_spinup  
+   $ sbatch jnsem_prep.ecf  
+   $ sbatch jnsem_forecast.ecf  
+   $ sbatch jnsem_post.ecf  
 
-   $ setenv RUN_TYPE atm2wav2ocn
-   $ sbatch jnsem_prep.ecf
-   $ sbatch jnsem_forecast.ecf
-   $ sbatch jnsem_post.ecf
+   $ setenv RUN_TYPE atm2wav2ocn  
+   $ sbatch jnsem_prep.ecf  
+   $ sbatch jnsem_forecast.ecf  
+   $ sbatch jnsem_post.ecf  
    
 e) The results of these working directory of these runs are located in the scratch space:   
    
