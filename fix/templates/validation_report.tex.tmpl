@@ -1,0 +1,151 @@
+\documentclass[12pt]{article}
+
+\usepackage{amsmath}    % need for subequations
+\usepackage{graphicx}   % need for figures
+\usepackage{verbatim}   % useful for program listings
+\usepackage{color}      % use if color is used in text
+\usepackage{hyperref}   % use for hypertext links, including those to external documents and URLs
+\usepackage{subfig}     % for multipanel figures
+
+% don't need the following. simply use defaults
+\setlength{\baselineskip}{16.0pt}    % 16 pt usual spacing between lines
+
+\setlength{\parskip}{3pt plus 2pt}
+\setlength{\parindent}{20pt}
+\setlength{\oddsidemargin}{0.3cm}
+\setlength{\evensidemargin}{0.3cm}
+\setlength{\marginparsep}{0.75cm}
+\setlength{\marginparwidth}{2.5cm}
+\setlength{\marginparpush}{1.0cm}
+\setlength{\textwidth}{150mm}
+
+\begin{comment}
+\pagestyle{empty} % use if page numbers not wanted
+\end{comment}
+
+% above is the preamble
+
+\begin{document}
+
+\begin{center}
+{\large NSEM Validation Report}
+\end{center}
+
+\section{Introduction}
+This is the validation report of the Named Storm Event Model (NSEM) for the storm event $storm.
+
+\section{Methodology}
+
+The paired t-test evaluates whether the mean difference between the model and observations are zero.
+
+\section{Summary results}
+
+Figures~\ref{fig:hwrf_summary} and~\ref{fig:ww3_summary} show the summary results of HWRF and WW3 respectively. 
+In each case, the bar charts of p-value results by station and the geographical distribution of the 90\% accuracy test results are shown.  
+
+\begin{figure}[h!tp]
+\begin{center}
+\subfloat[Bar chart of p-values by station. Red line: p-val = 0.05]{%
+  \includegraphics[width=0.65\columnwidth]{$fig_hwrf_summary}%
+}
+
+\subfloat[Spatial plot of test results. Blue: Pass; Red: Fail]{%
+  \includegraphics[width=0.65\columnwidth]{$fig_hwrf_map}%
+}
+
+\caption{\label{fig:hwrf_summary}Summary of 90\% accuracy test results for HWRF. }
+\end{center}
+\end{figure}
+
+\begin{figure}[h!tp]
+\begin{center}
+\subfloat[Bar chart of p-values by station. Red line: p-val = 0.05]{%
+  \includegraphics[width=0.65\columnwidth]{$fig_ww3_summary}%
+}
+
+\subfloat[Spatial plot of test results. Blue: Pass; Red: Fail]{%
+  \includegraphics[width=0.65\columnwidth]{$fig_ww3_map}%
+}
+
+\caption{\label{fig:ww3_summary}Summary of 90\% accuracy test results for WW3. }
+\end{center}
+\end{figure}
+
+\clearpage
+
+\section{Detailed results}
+
+This section provides details of the stations that best meet the 90\% accuracy criterion, versus those 
+that had the poorest performance. Figures~\ref{fig:hwrf_best} and~\ref{fig:hwrf_worst} show the best and 
+worst results for HWRF, and Figures~\ref{fig:ww3_best} and~\ref{fig:ww3_worst} show the corresponding results for WW3. 
+Provided details are the (a) time series comparison between model and observation (b) error historgram, and (c) scatterplot.
+
+\begin{figure}[htp]
+\begin{center}
+\subfloat[Time series]{%
+  \includegraphics[width=0.55\columnwidth]{$fig_u10_ts_best}%
+}
+\subfloat[Histograms]{%
+  \includegraphics[width=0.55\columnwidth]{$fig_u10_hist_best}%
+}
+
+\subfloat[Scatterplots]{%
+  \includegraphics[width=0.55\columnwidth]{$fig_u10_scatter_best}%
+}
+
+\caption{\label{fig:hwrf_best}Details of best-performing station in terms of U10 wind speed.}
+\end{center}
+\end{figure}
+
+\begin{figure}[htp]
+\begin{center}
+\subfloat[Time series]{%
+  \includegraphics[clip,width=0.55\columnwidth]{$fig_u10_ts_worst}%
+}
+\subfloat[Histograms]{%
+  \includegraphics[clip,width=0.55\columnwidth]{$fig_u10_hist_worst}%
+}
+
+\subfloat[Scatterplots]{%
+  \includegraphics[clip,width=0.55\columnwidth]{$fig_u10_scatter_worst}%
+}
+
+\caption{\label{fig:hwrf_worst}Details of worst-performing station in terms of U10 wind speed.}
+\end{center}
+\end{figure}
+
+\begin{figure}[htp]
+\begin{center}
+\subfloat[Time series]{%
+  \includegraphics[width=0.55\columnwidth]{$fig_hs_ts_best}%
+}
+\subfloat[Histograms]{%
+  \includegraphics[width=0.55\columnwidth]{$fig_hs_hist_best}%
+}
+
+\subfloat[Scatterplots]{%
+  \includegraphics[width=0.55\columnwidth]{$fig_hs_scatter_best}%
+}
+
+\caption{\label{fig:ww3_best}Details of best-performing station in terms of significant wave height Hs.}
+\end{center}
+\end{figure}
+
+\begin{figure}[htp]
+\begin{center}
+\subfloat[Time series]{%
+  \includegraphics[clip,width=0.55\columnwidth]{$fig_hs_ts_worst}%
+}
+\subfloat[Histograms]{%
+  \includegraphics[clip,width=0.55\columnwidth]{$fig_hs_hist_worst}%
+}
+
+\subfloat[Scatterplots]{%
+  \includegraphics[clip,width=0.55\columnwidth]{$fig_hs_scatter_worst}%
+}
+
+\caption{\label{fig:ww3_worst}Details of worst-performing station in terms of significant wave height Hs.}
+\end{center}
+\end{figure}
+
+\end{document}
