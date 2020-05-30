@@ -1,5 +1,4 @@
 import os, sys
-from string import Template
 
 # Get enviroment vars from ecFlow scripting
 ROOTDIR = os.getenv('ROOTDIR')
@@ -12,6 +11,10 @@ COMOUT = os.getenv('COMOUT')
 STORM = os.getenv('STORM')
 RUN_TYPE = os.getenv('RUN_TYPE')
 
+USHnsem = os.getenv('USHnsem')
+sys.path.append(USHnsem)
+import nsem_utils
+
 # Select appropriate base_info according selected storm
 try:
     os.system('rm base_info.pyc'  )
@@ -22,26 +25,6 @@ if 'base_info' in sys.modules:
 
 sys.path.append(PARMnsem+'/storms/'+STORM)
 import base_info
-
-##################################
-# NOTE: This should be moved to a separate module
-def tmp2scr(filename,tmpname,d):
-    """
-    Replace a pattern in tempelate file and generate a new input file.
-    filename: full path to input file
-    tmpname:  full path to tempelate file
-    d:        dictionary of all patterns need to replace   
-
-    Uses string.Template from the Python standard library
-    """
-     
-    fileout = open( filename,'w' )
-    filetmp = open( tmpname ,'r' )
-    out     = Template( filetmp.read() ).safe_substitute(d)
-    fileout.write(str(out))
-    fileout.close()
-    filetmp.close()
-##################################
 
 os.chdir(RUNdir)
 print("Executing in", RUNdir)
@@ -79,7 +62,7 @@ if RUN_TYPE == 'atm2wav2ocn':
    ##
    tmpname = os.path.join(FIXnsem, 'templates', base_info.ww3_ounf_tmpl)
    ww3_ounf = os.path.join(RUNdir,'ww3_ounf.inp')
-   tmp2scr(filename=ww3_ounf,tmpname=tmpname,d=dc_ww3_ounf)
+   nsem_utils.tmp2scr(filename=ww3_ounf,tmpname=tmpname,d=dc_ww3_ounf)
 
    os.system('cp ${FIXnsem}/templates/ww3_ounf.inp ${RUNdir}')
    os.system('${EXECnsem}/ww3_ounf ww3_ounf.inp > ww3_ounf.out')
