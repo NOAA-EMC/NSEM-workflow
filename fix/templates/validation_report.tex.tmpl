@@ -17,14 +17,100 @@
 \setlength{\marginparpush}{1.0cm}
 \setlength{\textwidth}{150mm}
 
+\newcommand{\pb}{\vfill \pagebreak}
+\newcommand{\bpage}{\vfill \pagebreak \strut
+
+\vspace{2.5in} \centerline{This page is intentionally left blank.}}
+\newcommand{\bpagea}{\strut
+
+\vspace{2.5in} \centerline{This page is intentionally left blank.}}
+
+%%%%% The above material is the preamble
+
 \begin{document}
 
-\begin{center}
-{\large NSEM Validation Report}
+\pagestyle{empty}
+
+\begin{center} 
+U. S. Department of Commerce \\
+National Oceanic and Atmospheric Administration \\
+National Weather Service \\
+National Centers for Environmental Prediction \\
+5830 University Research Court \\
+College Park, MD 20740
+
+\vspace{15mm}
+
+{\bf Technical Note}
+
+\vspace{15mm}
+
+{\large COASTAL Act Named Storm Event Model Validation Report for Hurricane \MakeUppercase{$storm}} \\
+
+\vspace{15mm}
+
+The Named Storm Event Model (NSEM) Development Group \\
+\strut \\
+NWS/NCEP/Environmental Modeling Center \\
+NOS/OCS/Coast Survey Development Lab \\
+NWS/OWP/National Water Center
+
+\vfill
+
+$date \\
+(DRAFT) \\
+\vspace{\baselineskip}
 \end{center}
+ 
+\vfill
+
+\noindent \rule{140mm}{0.5mm} \\
+{\small $^\dag$ MDAB Contribution No.~XXX.}
+
+\bpage
+
+\pb
+
+\markboth{COASTAL Act}
+         {{\rm DRAFT} \hspace{20.5mm} COASTAL Act NSEM Validation Report \MakeUppercase{$storm}}
+\pagestyle{myheadings}
+\pagenumbering{roman}
+\setcounter{page}{1}
+
+%\cftsetpnumwidth{3em}
+%\cftsetrmarg{4em}  %% make sure that this is larger than above
+
+\tableofcontents
+
+\pb
+\pagestyle{empty}
+\bpagea
+
+\pb
+\pagestyle{myheadings}
+\pagenumbering{arabic}
 
 \section{Introduction}
-This is the validation report of the Named Storm Event Model (NSEM) for the storm event $storm.
+The Consumer Option for an Alternative System To Allocate Losses (COASTAL) 
+Act, which was included in the Biggert-Waters Flood Insurance Reform and 
+Modernization Act of 2012, was enacted to help the Federal Emergency 
+Management Agency (FEMA) determine the extent to which wind vs. water was 
+the cause of damage in cases where little tangible evidence exists beyond 
+a building's foundation following a tropical cyclone (also known as
+`indeterminate losses' or `slabs'). This determination is needed for the 
+proper and timely adjustment of insurance claims, as water damage is covered 
+by FEMA's National Flood Insurance Program, while wind damage is covered by 
+private insurers. The COASTAL Act requires the National Oceanic and Atmospheric 
+Administration (NOAA) to produce detailed post-storm assessments following 
+certain tropical cyclones impacting the U.S. and its territories. The assessments 
+will be produced using a Named Storm Event Model (NSEM), which will indicate 
+the strength and timing of damaging winds and water at a given location within 
+the impacted area. NOAA is required to make post-storm assessment results and 
+observations from the storm available to the public via the Coastal Wind and 
+Water Event Database (CWWED).
+
+This report summarizes the 90\% validation assessment of the Named Storm 
+Event Model (NSEM) for the storm event \MakeUppercase{$storm}.
 
 \section{Methodology}
 
