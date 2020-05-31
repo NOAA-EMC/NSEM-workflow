@@ -106,6 +106,7 @@ print('Worst station is '+hs_worst)
 # (b) Populate report by setting paths to result figures
 dc_valreport={}
 dc_valreport.update({'storm'                  :STORM })
+dc_valreport.update({'date'                   :datetime.today().strftime('%B %e, %Y') })
 dc_valreport.update({'fig_hwrf_summary'       :RUNdir+"/ttest_summary_HWRF.png" })
 dc_valreport.update({'fig_hwrf_map'           :RUNdir+"/ttest_map_HWRF.png" })
 dc_valreport.update({'fig_ww3_summary'        :RUNdir+"/ttest_summary_WW3.png" })
