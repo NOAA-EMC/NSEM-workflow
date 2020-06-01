@@ -1,4 +1,4 @@
-# Script: postproc_ttest.py
+# Script: nsem_ttest.py
 # Author: Andre van der Westhuysen, 08/26/19
 # Purpose: Script to perform a paired t-test for assessing 90% accuracy 
 
