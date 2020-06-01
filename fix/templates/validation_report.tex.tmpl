@@ -1,6 +1,6 @@
 \documentclass[12pt]{article}
 
-\usepackage{amsmath}
+\usepackage[fleqn]{amsmath}
 \usepackage{graphicx}
 \usepackage{verbatim}
 \usepackage{color}
@@ -91,6 +91,7 @@ $date \\
 \pagenumbering{arabic}
 
 \section{Introduction}
+\subsection{Scope}
 The Consumer Option for an Alternative System To Allocate Losses (COASTAL) 
 Act, which was included in the Biggert-Waters Flood Insurance Reform and 
 Modernization Act of 2012, was enacted to help the Federal Emergency 
@@ -107,16 +108,81 @@ will be produced using a Named Storm Event Model (NSEM), which will indicate
 the strength and timing of damaging winds and water at a given location within 
 the impacted area. NOAA is required to make post-storm assessment results and 
 observations from the storm available to the public via the Coastal Wind and 
-Water Event Database (CWWED).
+Water Event Database (CWWED). The NSEM is a coupled coastal wave and inundation 
+model comprising of the components ADCIRC, WAVEWATCH III and the National Water 
+Model. The coupling is achieved using the NOAA Earth Modeling System (NEMS) 
+framework.
 
-This report summarizes the 90\% validation assessment of the Named Storm 
-Event Model (NSEM) for the storm event \MakeUppercase{$storm}.
+\subsection{Assessment area}
+FEMA specified the assessment area as the area between the shoreline and the 
+limit of coastal flooding during a Named Storm. This area should include all 
+spatial coverage of USGS/FEMA post-event surveys, except for data points that 
+did not pass QC. 
 
-\section{Methodology}
+\subsection{Model validation} 
+The purpose of this report is to summarize the results of the 90\% validation 
+test of the Named Storm Event Model (NSEM) assessment for the storm event 
+\MakeUppercase{$storm}. Section \ref{method} presents the methodology followed 
+in the model validation. Section \ref{summary_result} provides an overview of 
+these results for each covered data variable, followed by details of the 
+best and worst performing stations in Section \ref{detail_result}. Section 
+\ref{discuss} provides a general discussion of the presented results.
 
-The paired t-test evaluates whether the mean difference between the model and observations are zero.
+\section{Methodology} \label{method}
 
-\section{Summary results}
+The perfomrance of the Named Storm Event Model (NSEM) is validated at locations 
+where in-situ observations are available. Since FEMA's damage equation critically 
+depends upon the timing of wind and water impacts on the assessed structure, 
+it is required to compare the time series of the covered data from the NSEM 
+with a time series of observations, as opposed to, for example, maxima (such 
+as high-water marks). For a given model run of the NSEM, we therefore need a  
+test to compare the modeled time series to the observed time series. The level 
+of accuracy is set in the COASTAL Act as 90\%, which is interpreted as a level 
+of error of 10\%. We consider this requirement to be stricter than achieving 
+a mean bias of $<$10\%, since a significant number of individual model data points 
+could still differ by more than 10\% from the corresponding observation. At 
+the same time, it is considered unreasonably strict to require that every model 
+data point have an error of less than 10\%, considering the natural variability 
+in the observed phenomenon (e.g. wind U10 wave height Hs), and observational 
+error. As a result, the accuracy assessment will focus on the mean difference 
+between the modeled and observed time series, and test whether this mean 
+difference is below 10\%.
+
+Since the model and observation both describe the same process (e.g. wind 
+speed or wave height), there is a dependence between the modeled and observed 
+time series variables. In this setting, the paired t-test hypothesis test is 
+appropriate. To test whether the mean difference between these two time 
+series is less than 10\%, we set the following null hypothesis $H_0$ and 
+alternative hypothesis $H_a$:
+
+\begin{equation}
+\begin{aligned}
+H_0: \mu_d < 0.1\\
+H_a: \mu_d > 0.1
+\end{aligned}
+\end{equation}
+
+where the mean relative difference is defined as $d_i = (X_{i,\mathrm{mod}} - X_{i,\mathrm{obs}})/X_{i,\mathrm{obs}}$, 
+and $X_i$ is the model variable at time $i$ being tested. Since the alternative hypothesis 
+states that the relative difference is greater than 0.1, this constitutes 
+an upper-tailled test. This test has the following assumptions (Ott and Longnecker, 2017):
+
+\begin{itemize}
+\item That the sampling distribution of $d_i$ is a normal distribution.
+\item That the $d_i$ samples are independent.
+\end{itemize}
+
+The hypothesis test is conducted at the standard level of significance of 
+$\alpha$ = 0.05. This means that the null hypothesis that the mean difference 
+between two time series at a given station is less than 0.1 (or 10\%) 
+should be rejected if the p-value of this statistical test is $<$ 0.05. 
+In practical terms, this means that the probability of erroneously rejecting 
+the null hypothesis (that 90\% accuracy is met), given that it is true, is
+less than 5\%. In the following sections, this validation is conducted for 
+all stations within the assessment area, and presented in terms of 
+overview results, followed by more extensive detail at select stations.
+
+\section{Summary results} \label{summary_result}
 
 Figures~\ref{fig:hwrf_summary} and~\ref{fig:ww3_summary} show the summary results of HWRF and WW3 respectively. 
 In each case, the bar charts of p-value results by station and the geographical distribution of the 90\% accuracy test results are shown.  
@@ -151,7 +217,7 @@ In each case, the bar charts of p-value results by station and the geographical 
 
 \clearpage
 
-\section{Detailed results}
+\section{Detailed results} \label{detail_result}
 
 This section provides details of the stations that best meet the 90\% accuracy criterion, versus those 
 that had the poorest performance. Figures~\ref{fig:hwrf_best} and~\ref{fig:hwrf_worst} show the best and 
@@ -225,5 +291,11 @@ Provided details are the (a) time series comparison between model and observatio
 \caption{\label{fig:ww3_worst}Details of worst-performing station in terms of significant wave height Hs.}
 \end{center}
 \end{figure}
+
+\clearpage
+
+\section{Discussion} \label{discuss}
+
+To complete.
 
 \end{document}
