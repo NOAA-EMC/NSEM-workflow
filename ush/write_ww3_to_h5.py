@@ -27,11 +27,7 @@ print(nc4_type22.variables.keys())
 #station_name = nc.variables['station_name']
 #print(type(station_name))
 
-#stations = np.loadtxt('/scratch2/COASTAL/coastal/save/Andre.VanderWesthuysen/runup/scripts/station_list.txt', dtype='int')
-#stations = np.arange(2645,2648)
-#stations = np.arange(2645,3109) 
 stations = np.arange(0,3677)
-#stations = np.arange(3000,3677)
 print('Extracting 20m contours for the following stations:')
 print(stations)
 
@@ -62,9 +58,6 @@ yvel = cur[:,stations].flatten()*np.sin((curdir[:,stations])*np.pi/180.).flatten
 xwind = wnd[:,stations].flatten()*np.cos((270. - wnddir[:,stations])*np.pi/180.).flatten()
 ywind = wnd[:,stations].flatten()*np.sin((270. - wnddir[:,stations])*np.pi/180.).flatten()
 
-#statdata = pd.DataFrame({'Lon': lon, 'Lat': lat[:,stations].flatten(), 'Hs': hs[:,stations].flatten(), \
-#                         'Tp': tp, 'Dir_mean': mdir[:,stations].flatten(), 'X-vel': xvel, 'Y-vel': yvel, \
-#                         'Depth': dpt[:,stations].flatten(), 'X-wind': xwind, 'Y-wind': ywind}, index=jd)
 statdata = pd.DataFrame(data=hs[:,:], columns=station[:], index=jd)
 
 print(statdata.head(5))
@@ -82,6 +75,5 @@ statdata_hourly = statdata
 print(statdata_hourly.head(5))
 print(statdata_hourly.tail(5))
 
-#statdata_hourly.to_csv('model.'+initdate, float_format='%10.4f', date_format='%Y%m%d%H%M00', header=True, na_rep='  -99.0000')
 statdata_hourly.to_hdf('model.h5', key='model', mode='w', float_format='%10.4f', date_format='%Y%m%d%H%M00', header=True, na_rep='  -99.0000')
 
