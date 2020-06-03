@@ -120,7 +120,7 @@ spatial coverage of USGS/FEMA post-event surveys, except for data points that
 did not pass QC. 
 
 \subsection{Model validation} 
-The purpose of this report is to summarize the results of the 90\% validation 
+The purpose of this automated report is to summarize the results of the 90\% validation 
 test of the Named Storm Event Model (NSEM) assessment for the storm event 
 \MakeUppercase{$storm}. Section \ref{method} presents the methodology followed 
 in the model validation. Section \ref{summary_result} provides an overview of 
@@ -130,7 +130,7 @@ best and worst performing stations in Section \ref{detail_result}. Section
 
 \section{Methodology} \label{method}
 
-The perfomrance of the Named Storm Event Model (NSEM) is validated at locations 
+The performance of the Named Storm Event Model (NSEM) is validated at locations 
 where in-situ observations are available. Since FEMA's damage equation critically 
 depends upon the timing of wind and water impacts on the assessed structure, 
 it is required to compare the time series of the covered data from the NSEM 
@@ -142,7 +142,7 @@ of error of 10\%. We consider this requirement to be stricter than achieving
 a mean bias of $<$10\%, since a significant number of individual model data points 
 could still differ by more than 10\% from the corresponding observation. At 
 the same time, it is considered unreasonably strict to require that every model 
-data point have an error of less than 10\%, considering the natural variability 
+data point has an error of less than 10\%, considering the natural variability 
 in the observed phenomenon (e.g. wind U10 wave height Hs), and observational 
 error. As a result, the accuracy assessment will focus on the mean difference 
 between the modeled and observed time series, and test whether this mean 
@@ -165,7 +165,7 @@ H_a: \mu_d > 0.1
 where the mean relative difference is defined as $d_i = (X_{i,\mathrm{mod}} - X_{i,\mathrm{obs}})/X_{i,\mathrm{obs}}$, 
 and $X_i$ is the model variable at time $i$ being tested. Since the alternative hypothesis 
 states that the relative difference is greater than 0.1, this constitutes 
-an upper-tailled test. This test has the following assumptions (Ott and Longnecker, 2017):
+an upper-tailed test. This test has the following assumptions (Ott and Longnecker, 2017):
 
 \begin{itemize}
 \item That the sampling distribution of $d_i$ is a normal distribution.
@@ -184,8 +184,10 @@ overview results, followed by more extensive detail at select stations.
 
 \section{Summary results} \label{summary_result}
 
-Figures~\ref{fig:hwrf_summary} and~\ref{fig:ww3_summary} show the summary results of HWRF and WW3 respectively. 
-In each case, the bar charts of p-value results by station and the geographical distribution of the 90\% accuracy test results are shown.  
+Figures~\ref{fig:hwrf_summary} and~\ref{fig:ww3_summary} show the summary 
+results of HWRF and WW3 respectively. In each case, the bar charts of p-value 
+results by station and the geographical distribution of the 90\% accuracy 
+test results are shown.  
 
 \begin{figure}[h!tp]
 \begin{center}
