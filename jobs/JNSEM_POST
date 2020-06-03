@@ -114,8 +114,6 @@ export SITETYPE=${SITETYPE:-EMC}
 export COMOUT=${COMROOT}/${NET}/${envir}/${STORM}.${RUN_TYPE}.${PDY}
 export GESOUT=${GESROOT}/${envir}/${NET}.${PDY}
 export GESIN=${GESROOT}/${envir}/${NET}.${PDY}
-export GESINm1=${GESROOT}/${envir}/${NET}.${PDYm1}
-export GESINm2=${GESROOT}/${envir}/${NET}.${PDYm2}
 
 #startmsg
 
