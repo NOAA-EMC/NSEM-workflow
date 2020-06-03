@@ -115,8 +115,6 @@ export SITETYPE=${SITETYPE:-EMC}
 export COMOUT=${COMROOT}/${NET}/${envir}/${STORM}.${RUN_TYPE}.${PDY}
 export GESOUT=${GESROOT}/${envir}/${NET}.${PDY}/${STORM}
 export GESIN=${GESROOT}/${envir}/${NET}.${PDY}/${STORM}
-export GESINm1=${GESROOT}/${envir}/${NET}.${PDYm1}/${STORM}
-export GESINm2=${GESROOT}/${envir}/${NET}.${PDYm2}/${STORM}
 
 export COMINatm=/scratch2/NCEPDEV/stmp1/Andre.VanderWesthuysen/data/com/atm/para/${STORM}
 export COMINwave=/scratch2/NCEPDEV/stmp1/Andre.VanderWesthuysen/data/com/ww3/para/${STORM}
