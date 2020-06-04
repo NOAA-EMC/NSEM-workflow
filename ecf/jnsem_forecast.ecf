@@ -13,8 +13,8 @@
 #SBATCH --account=coastal
 #SBATCH --job-name=jnsem_prep
 #SBATCH -q batch
-#SBATCH --time=08:00:00
-#SBATCH --ntasks=1441
+#SBATCH --time=01:00:00
+#SBATCH --ntasks=23
 #SBATCH --mail-user=andre.vanderwesthuysen@noaa.gov
 #SBATCH --mail-type=ALL
 #SBATCH --output=jnsem_forecast.out.log
@@ -35,7 +35,7 @@ export CASEROOT=/scratch2/NCEPDEV/stmp1/${USER}/data
 
 #Dev environment value for $job and $jobid
 export job=pnsem_forecast
-export jobid=pnwps_forecast.$$
+export jobid=pnsem_forecast.$$
 
 #Dev environment jlogfile
 #mkdir -p ${COMROOT}/logs/${envir}
@@ -48,14 +48,14 @@ ${NWROOT}/jobs/J${MODEL}_FORECAST
 #%manual
 ################################################################################
 #TASKSCRIPT DOCUMENTATION BLOCK
-#TASKSCRIPT:     jnsem_prep
+#TASKSCRIPT:     jnsem_forecast
 #LAST MODIFIER:  Andre van der Westhuysen
 #ORGANIZATION:   IMSG at NOAA/NCEP/EMC
 #DATE:           May 2020
 #FULL NAME:      /nsem/jnsem
-#PURPOSE:        To execute the job that preps the input files for ADC-WW3-NWM model
+#PURPOSE:        To execute the forecast job for ADC-WW3-NWM model
 #JOB SCRIPT CALLED: ${NWROOT}/jobs/JNSEM ==>
-#                            ${NWROOT}/scripts/exnsem_prep.sh.ecf
+#                            ${NWROOT}/scripts/exnsem_forecast.sh.ecf
 #################################################################################
 ######################################################################
 # Job specific troubleshooting instructions:
