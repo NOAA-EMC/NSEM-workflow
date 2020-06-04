@@ -55,13 +55,10 @@ if [ "${RUN_TYPE}" != "tide_spinup" ] &&
     exit 1
 fi
 
-export pgmout=OUTPUT.$$
-
-cd /scratch2/NCEPDEV/stmp1/${USER}/data/
+#export pgmout=OUTPUT.$$
+#export pgm="NSEM"
 
 PDY="$(date +'%Y%m%d')"
-
-export pgm="NWPS"
 
 export DATA=/scratch2/NCEPDEV/stmp1/${USER}/data/${STORM}.${RUN_TYPE}.${PDY}
 export GESROOT=/scratch2/NCEPDEV/stmp1/${USER}/data/nwges
@@ -80,9 +77,9 @@ export RUN=$(echo ${job}|awk -F"_" '{print $2}')
 # SENDCOM  - Copy Files From TMPDIR to $COMOUT
 # SENDDBN  - Issue DBNet Client Calls
 ####################################
-export SENDCOM=${SENDCOM:-YES}
-export SENDECF=${SENDECF:-YES}
-export SENDDBN=${SENDDBN:-NO}
+#export SENDCOM=${SENDCOM:-YES}
+#export SENDECF=${SENDECF:-YES}
+#export SENDDBN=${SENDDBN:-NO}
 
 ####################################
 # Specify Execution Areas
@@ -103,7 +100,7 @@ export RUNdir=${RUNdir:-${DATA}/run}
 export TMPdir=${TMPdir:-${DATA}/tmp}
 export LOGdir=${LOGdir:-${DATA}/logs}
 
-# Set NWPS run conditions
+# Set NSEM run conditions
 export DEBUGGING=${DEBUGGING:-TRUE}
 export DEBUG_LEVEL=${DEBUG_LEVEL:-1}
 export ISPRODUCTION=${ISPRODUCTION:-TRUE}
@@ -116,10 +113,11 @@ export COMOUT=${COMROOT}/${NET}/${envir}/${STORM}.${RUN_TYPE}.${PDY}
 export GESOUT=${GESROOT}/${envir}/${NET}.${PDY}/${STORM}
 export GESIN=${GESROOT}/${envir}/${NET}.${PDY}/${STORM}
 
-export COMINatm=/scratch2/NCEPDEV/stmp1/Andre.VanderWesthuysen/data/com/atm/para/${STORM}
-export COMINwave=/scratch2/NCEPDEV/stmp1/Andre.VanderWesthuysen/data/com/ww3/para/${STORM}
-export COMINadc=/scratch2/NCEPDEV/stmp1/Andre.VanderWesthuysen/data/com/adc/para/${STORM}
-export COMINwavdata=/scratch2/NCEPDEV/stmp1/Andre.VanderWesthuysen/data/com/wavdata/para/${STORM}
+# Note: These directories need to be populated with data by upstream models
+export COMINatm=${COMROOT}/atm/para/${STORM}
+export COMINwave=${COMROOT}/ww3/para/${STORM}
+export COMINadc=${COMROOT}/adc/para/${STORM}
+export COMINwavdata=${COMROOT}/wavdata/para/${STORM}
 
 mkdir -p $INPUTdir $RUNdir $TMPdir $LOGdir $COMOUT $GESOUT
 
