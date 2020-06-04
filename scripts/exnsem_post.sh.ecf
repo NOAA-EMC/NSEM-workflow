@@ -1,4 +1,27 @@
 #!/bin/bash
+# ----------------------------------------------------------- 
+# UNIX Shell Script File
+# Tested Operating System(s): RHEL 7
+# Tested Run Level(s): 
+# Shell Used: BASH shell
+# Original Author(s): Andre van der Westhuysen
+# File Creation Date: 05/15/2020
+# Date Last Modified:
+#
+# Version control: 1.00
+#
+# Support Team:
+#
+# Contributors: 
+#
+# ----------------------------------------------------------- 
+# ------------- Program Description and Details ------------- 
+# ----------------------------------------------------------- 
+#
+# Execute script to postprocess NSEM output
+#
+# -----------------------------------------------------------
+
 echo "============================================================="
 echo "=                                                            "
 echo "=         RUNNING NSEM FOR STORM: ${STORM}                   "
