@@ -31,7 +31,6 @@ export envir="para"
 
 export DEVWCOSS_USER=$(whoami)
 export COMROOT=/scratch2/NCEPDEV/stmp1/${USER}/data/com
-export CASEROOT=/scratch2/NCEPDEV/stmp1/${USER}/data
 
 #Dev environment value for $job and $jobid
 export job=pnsem_forecast
