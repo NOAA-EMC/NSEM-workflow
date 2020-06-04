@@ -17,6 +17,7 @@ RUNdir = os.getenv('RUNdir')
 EXECnsem = os.getenv('EXECnsem')
 PARMnsem = os.getenv('PARMnsem')
 FIXnsem = os.getenv('FIXnsem')
+USHnsem = os.getenv('USHnsem')
 GESIN = os.getenv('GESIN')
 COMINatm = os.getenv('COMINatm')
 COMINwave = os.getenv('COMINwave')
@@ -24,6 +25,9 @@ COMINwavdata = os.getenv('COMINwavdata')
 COMINadc = os.getenv('COMINadc')
 STORM = os.getenv('STORM')
 RUN_TYPE = os.getenv('RUN_TYPE')
+
+sys.path.append(USHnsem)
+import nsem_utils
 
 # Select appropriate base_info according selected storm
 try:
@@ -67,42 +71,6 @@ global log_file,run_dir
 def logf(txt1,log_file):
     os.system('echo "'+ txt1+ '" >> '+ log_file )
     os.system('echo "'+ txt1+ '"')
-
-#def tmp2scr(filename,tmpname,d):
-#    """
-#    Replace a pattern in tempelate file and generate a new input file.
-#    filename: full path to input file
-#    tmpname:  full path to tempelate file
-#    d:        dictionary of all patterns need to replace
-#    
-#    Dependency Cheetah    
-#    """
-#        
-#    from Cheetah.Template import Template
-#    #print filename
-#    fileout = open( filename,'w' )
-#    filetmp = open( tmpname ,'r' )
-#    out     = Template(file=filetmp,searchList =[d])
-#    fileout.write(str(out))
-#    fileout.close()
-#    filetmp.close()
-
-def tmp2scr(filename,tmpname,d):
-    """
-    Replace a pattern in tempelate file and generate a new input file.
-    filename: full path to input file
-    tmpname:  full path to tempelate file
-    d:        dictionary of all patterns need to replace   
-
-    Uses string.Template from the Python standard library
-    """
-     
-    fileout = open( filename,'w' )
-    filetmp = open( tmpname ,'r' )
-    out     = Template( filetmp.read() ).safe_substitute(d)
-    fileout.write(str(out))
-    fileout.close()
-    filetmp.close()
 ###########################################
 def get_run_scr():
     # run dir setting 
@@ -176,8 +144,8 @@ def prep_adc(run_dir):
     # get updated fort.15
     fort15tmp = os.path.join(adc_grd_inp,base_info.fort15_temp)
     fort15  = os.path.join(run_dir,'fort.15')
-    tmp2scr(filename=fort15,tmpname=fort15tmp,d=d15)
-    os.system('cp -fr  ' +   fort15tmp          +'  '   +run_dir+'/scr/')
+    nsem_utils.tmp2scr(filename=fort15,tmpname=fort15tmp,d=d15)
+    #os.system('cp -fr  ' +   fort15tmp          +'  '   +run_dir+'/scr/')
     
     #print ' > AdcPrep ... '
     txt1 = ' > AdcPrep ...  '
@@ -272,8 +240,8 @@ def prep_ww3(run_dir):
     ##
     tmpname = os.path.join(FIXnsem, 'templates', base_info.ww3_multi_tmpl)
     ww3_multi = os.path.join(run_dir,'ww3_multi.inp')
-    tmp2scr(filename=ww3_multi,tmpname=tmpname,d=dc_ww3_multi)
-    os.system('cp -fr  ' +   tmpname          +'  '   +run_dir+'/scr/') 
+    nsem_utils.tmp2scr(filename=ww3_multi,tmpname=tmpname,d=dc_ww3_multi)
+    #os.system('cp -fr  ' +   tmpname          +'  '   +run_dir+'/scr/') 
 
 def prep_nems(run_dir):
     """
@@ -328,8 +296,8 @@ def prep_nems(run_dir):
     total_pets = ocn_pet_num + atm_pet_num + wav_pet_num
     tmpname = os.path.join(PARMnsem, base_info.nems_configure)
     model_configure  = os.path.join(run_dir,'nems.configure')
-    tmp2scr(filename=model_configure,tmpname=tmpname,d=dc2)
-    os.system('cp -fr  ' +   tmpname          +'  '   +run_dir+'/scr/')
+    nsem_utils.tmp2scr(filename=model_configure,tmpname=tmpname,d=dc2)
+    #os.system('cp -fr  ' +   tmpname          +'  '   +run_dir+'/scr/')
     ##########
     dc={}
     dc.update({'start_year'     :base_info.start_date_nems.year    })
@@ -343,9 +311,9 @@ def prep_nems(run_dir):
     ##
     tmpname = os.path.join(FIXnsem, 'templates', base_info.model_configure)
     model_configure  = os.path.join(run_dir,'atm_namelist.rc')
-    tmp2scr(filename=model_configure,tmpname=tmpname,d=dc)
+    nsem_utils.tmp2scr(filename=model_configure,tmpname=tmpname,d=dc)
     os.system('ln -svf ' + model_configure + ' ' + os.path.join(run_dir,'model_configure' ) )
-    os.system('cp -fr  ' +   tmpname          +'  '   +run_dir+'/scr/')
+    #os.system('cp -fr  ' +   tmpname          +'  '   +run_dir+'/scr/')
     ##################################################################################
     txt1 = '   > Prepare nems.configure ..'
     logf(txt1,log_file)   
@@ -387,8 +355,8 @@ def prep_nems(run_dir):
     total_pets = pet_max + 1
     tmpname = os.path.join(PARMnsem, base_info.nems_configure)
     model_configure  = os.path.join(run_dir,'nems.configure')
-    tmp2scr(filename=model_configure,tmpname=tmpname,d=dc3)
-    os.system('cp -fr  ' +   tmpname          +'  '   +run_dir+'/scr/')
+    nsem_utils.tmp2scr(filename=model_configure,tmpname=tmpname,d=dc3)
+    #os.system('cp -fr  ' +   tmpname          +'  '   +run_dir+'/scr/')
 
     txt1 = '   > Prepare config.rc ..'
     logf(txt1,log_file)   
@@ -452,8 +420,8 @@ def prep_nems(run_dir):
     dr.update({'WallTime' :base_info.WallTime      })
     dr.update({'Queue'    :base_info.Queue         })
     dr.update({'RunName'  :(base_info.RunName+base_info.Ver) })
-    #tmp2scr(filename=qsub ,tmpname='qsub.template',d=dr)
-    tmp2scr(filename=qsub ,tmpname=base_info.qsub_tempelate,d=dr)
+    #nsem_utils.tmp2scr(filename=qsub ,tmpname='qsub.template',d=dr)
+    nsem_utils.tmp2scr(filename=qsub ,tmpname=base_info.qsub_tempelate,d=dr)
     
     os.system('cp -fr '+ base_info.qsub_tempelate +' ' +run_dir+'/scr/')
     os.system('cp -fr   run*.sh           '            +run_dir)
@@ -644,9 +612,9 @@ def main0():
 def one_run_eq(run_scr):
     #run_dir =  get_run_dir()
     run_dir = RUNdir
-    os.system('echo "cd  ' + run_dir +' " >> ' + run_scr )
+    #os.system('echo "cd  ' + run_dir +' " >> ' + run_scr )
     #os.system('echo "qsub qsub.sh      " >> ' + run_scr )
-    os.system('echo "sbatch slurm.sh    " >> ' + run_scr )
+    #os.system('echo "sbatch slurm.sh    " >> ' + run_scr )
     #
     prep_nems(run_dir)
     prep_adc(run_dir)
