@@ -60,7 +60,8 @@ fi
 
 PDY="$(date +'%Y%m%d')"
 
-export DATA=/scratch2/NCEPDEV/stmp1/${USER}/data/${STORM}.${RUN_TYPE}.${PDY}
+export DATAROOT=/scratch2/NCEPDEV/stmp1/${USER}/data
+export DATA=${DATAROOT}/${STORM}.${RUN_TYPE}.${PDY}
 export GESROOT=/scratch2/NCEPDEV/stmp1/${USER}/data/nwges
 
 mkdir -p $DATA
