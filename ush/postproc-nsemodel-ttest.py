@@ -1,3 +1,26 @@
+# ----------------------------------------------------------- 
+# Python Script File
+# Tested Operating System(s): RHEL 7, Python 3.7.5
+# Tested Run Level(s): 
+# Shell Used: BASH shell
+# Original Author(s): Andre van der Westhuysen
+# File Creation Date: 05/15/2020
+# Date Last Modified:
+#
+# Version control: 1.00
+#
+# Support Team:
+#
+# Contributors: 
+#
+# ----------------------------------------------------------- 
+# ------------- Program Description and Details ------------- 
+# ----------------------------------------------------------- 
+#
+# Python script to perform 90% accuracy validation of NSEM output
+#
+# -----------------------------------------------------------
+
 import os, sys
 import numpy as np
 import pandas as pd
