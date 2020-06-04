@@ -35,7 +35,7 @@ export CASEROOT=/scratch2/NCEPDEV/stmp1/${USER}/data
 
 #Dev environment value for $job and $jobid
 export job=pnsem_prep
-export jobid=pnwps_prep.$$
+export jobid=pnsem_prep.$$
 
 #Dev environment jlogfile
 #mkdir -p ${COMROOT}/logs/${envir}
