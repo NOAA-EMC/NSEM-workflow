@@ -90,9 +90,8 @@ export EXECnsem=${EXECnsem:-${HOMEnsem}/exec}
 export SORCnsem=${SORCnsem:-${HOMEnsem}/sorc}
 export PARMnsem=${PARMnsem:-${HOMEnsem}/parm}
 export USHnsem=${USHnsem:-${HOMEnsem}/ush}
-export PMnsem=${PMnsem:-${USHnsem}/pm}
-export BATHYdb=${BATHYdb:-${FIXnsem}/bathy_db}
-export SHAPEFILEdb=${SHAPEFILEdb:-${FIXnwps}/shapefile_db}
+#export BATHYdb=${BATHYdb:-${FIXnsem}/bathy_db}
+#export SHAPEFILEdb=${SHAPEFILEdb:-${FIXnsem}/shapefile_db}
 
 # Set processing DIRs here
 export INPUTdir=${INPUTdir:-${DATA}/input}
