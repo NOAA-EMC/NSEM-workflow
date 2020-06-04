@@ -56,12 +56,9 @@ if [ "${RUN_TYPE}" != "tide_spinup" ] &&
 fi
 
 export pgmout=OUTPUT.$$
-
-cd /scratch2/NCEPDEV/stmp1/${USER}/data/
+export pgm="NSEM"
 
 PDY="$(date +'%Y%m%d')"
-
-export pgm="NWPS"
 
 export DATA=/scratch2/NCEPDEV/stmp1/${USER}/data/${STORM}.${RUN_TYPE}.${PDY}
 export GESROOT=/scratch2/NCEPDEV/stmp1/${USER}/data/nwges
@@ -79,9 +76,9 @@ export RUN=$(echo ${job}|awk -F"_" '{print $2}')
 # SENDCOM  - Copy Files From TMPDIR to $COMOUT
 # SENDDBN  - Issue DBNet Client Calls
 ####################################
-export SENDCOM=${SENDCOM:-YES}
-export SENDECF=${SENDECF:-YES}
-export SENDDBN=${SENDDBN:-NO}
+#export SENDCOM=${SENDCOM:-YES}
+#export SENDECF=${SENDECF:-YES}
+#export SENDDBN=${SENDDBN:-NO}
 
 ####################################
 # Specify Execution Areas
@@ -102,7 +99,7 @@ export RUNdir=${RUNdir:-${DATA}/run}
 export TMPdir=${TMPdir:-${DATA}/tmp}
 export LOGdir=${LOGdir:-${DATA}/logs}
 
-# Set NWPS run conditions
+# Set NSEM run conditions
 export DEBUGGING=${DEBUGGING:-TRUE}
 export DEBUG_LEVEL=${DEBUG_LEVEL:-1}
 export ISPRODUCTION=${ISPRODUCTION:-TRUE}
