@@ -1,6 +1,25 @@
-# Script: nsem_ttest.py
-# Author: Andre van der Westhuysen, 08/26/19
-# Purpose: Script to perform a paired t-test for assessing 90% accuracy 
+# ----------------------------------------------------------- 
+# Python Script File
+# Tested Operating System(s): RHEL 7, Python 3.7.5
+# Tested Run Level(s): 
+# Shell Used: BASH shell
+# Original Author(s): Andre van der Westhuysen
+# File Creation Date: 08/26/2019
+# Date Last Modified:
+#
+# Version control: 1.00
+#
+# Support Team:
+#
+# Contributors: Andre van der Westhuysen
+#
+# ----------------------------------------------------------- 
+# ------------- Program Description and Details ------------- 
+# ----------------------------------------------------------- 
+#
+# Python module for comouting statistical t-test
+#
+# -----------------------------------------------------------
 
 import numpy as np
 import pandas as pd
