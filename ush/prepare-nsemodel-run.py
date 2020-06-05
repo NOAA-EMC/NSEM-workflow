@@ -1,3 +1,25 @@
+# ----------------------------------------------------------- 
+# Python Script File
+# Tested Operating System(s): RHEL 7, Python 3.7.5
+# Tested Run Level(s): 
+# Shell Used: BASH shell
+# Original Author(s): Saeed Moghimi
+# File Creation Date: 04/02/2020
+# Date Last Modified: 06/04/2020
+#
+# Version control: 1.00
+#
+# Support Team:
+#
+# Contributors: Andre van der Westhuysen
+#
+# ----------------------------------------------------------- 
+# ------------- Program Description and Details ------------- 
+# ----------------------------------------------------------- 
+#
+# Script to prepare NEMS templates and component model inputs
+#
+# -----------------------------------------------------------
 
 __author__ = "Saeed Moghimi"
 __copyright__ = "Copyright 2019, NOAA"
@@ -75,30 +97,10 @@ def logf(txt1,log_file):
 def get_run_scr():
     # run dir setting 
     curr_time  = time.strftime("%Y%m%d_h%H_m%M_s%S")
-    run_scr    = os.path.join(RUNdir, base_info.RunName+'_'+base_info.Ver+'_' + curr_time + '.sh' )
+    #run_scr    = os.path.join(RUNdir, base_info.RunName+'_'+base_info.Ver+'_' + curr_time + '.sh' )
     log_file    = os.path.join(RUNdir, base_info.RunName+'_'+base_info.Ver+'_' + curr_time + '.log' )
-    os.system('touch  ' + run_scr)
-    return run_scr,log_file
-
-def get_run_dir():
-    # run dir setting 
-    curr_time  = time.strftime("%Y%m%d_h%H_m%M_s%S")
-    run_dir    =  os.path.join(base_info.main_run_dir,base_info.RunName+'_'+base_info.Ver,'rt_' + curr_time + \
-        'r' +str(int(np.random.rand(1)*1000+1000))[1:] )
-    os.system('mkdir -p ' + run_dir)
-    #print ' > Run dir .. \n ',run_dir
-    txt1 = ' > Run dir = ' + run_dir
-    logf(txt1,log_file)
-    # backup script
-    os.system('mkdir -p '+ run_dir+'/scr/')
-    #Back_up scr
-    args     = sys.argv
-    scr_name = args[0]    
-    scr_dir  = os.getcwd()
-    os.system('cp -fr  '+scr_dir+'/'+scr_name +'    '+run_dir+'/scr/')
-    os.system('cp -fr  base_info*                   '+run_dir+'/scr/')
-    #
-    return run_dir
+    #os.system('touch  ' + run_scr)
+    return log_file
 
 def prep_adc(run_dir):
     """
@@ -209,7 +211,8 @@ def prep_ww3(run_dir):
     os.chdir(run_dir)
 
     # Process WW3 grid and physics
-    print("Processing WW3 grid and physics...")
+    txt1 = ' > Processing WW3 grid and physics...'
+    logf(txt1,log_file) 
     os.system('cp -f ' + ww3_grd_inp + '/*.msh ' + run_dir)
     os.system('cp -f ' + ww3_grd_inp + '/ww3_grid.inp ' + run_dir)
     os.system('${EXECnsem}/ww3_grid ww3_grid.inp > ww3_grid.out')
@@ -218,21 +221,13 @@ def prep_ww3(run_dir):
 
     if base_info.wbound_flg:
        # Process WW3 boundary conditions
-       print("Processing WW3 boundary conditions...")
+       txt1 = ' > Processing WW3 boundary conditions...'
+       logf(txt1,log_file) 
        os.system('cp -f ${COMINwave}/*.spc ' + run_dir)
        os.system('cp -f ' + ww3_grd_inp + '/ww3_bound.inp ' + run_dir)
        os.system('${EXECnsem}/ww3_bound ww3_bound.inp > ww3_bound.out')
        os.system('mv nest.ww3 nest.inlet')  
     ##########
-    #start_pdy = datetime.datetime(base_info.start_date_nems.year, \
-    #                              base_info.start_date_nems.month, \
-    #                              base_info.start_date_nems.day, \
-    #                              base_info.start_date_nems.hour, \
-    #                              base_info.start_date_nems.minute, \
-    #                              base_info.start_date_nems.second)
-    #end_pdy = start_pdy + datetime.timedelta(days=base_info.ndays)
-    #start_pdy_string = start_pdy.strftime("%Y%m%d %H%M%S")
-    #end_pdy_string = base_info.wave_spin_end_date.strftime("%Y%m%d %H%M%S")
     dc_ww3_multi={}
     dc_ww3_multi.update({'start_pdy'    :base_info.tide_spin_end_date.strftime("%Y%m%d %H%M%S") })
     dc_ww3_multi.update({'end_pdy'      :base_info.wave_spin_end_date.strftime("%Y%m%d %H%M%S") })
@@ -609,8 +604,7 @@ def main0():
     
     #plot_domain_decomp()
 
-def one_run_eq(run_scr):
-    #run_dir =  get_run_dir()
+def one_run_eq():
     run_dir = RUNdir
     #os.system('echo "cd  ' + run_dir +' " >> ' + run_scr )
     #os.system('echo "qsub qsub.sh      " >> ' + run_scr )
@@ -645,7 +639,7 @@ def main():
         txt1 = ' > SpinUp/TideBaseRun/BestTrack case :'
         logf(txt1,log_file)    
         
-        one_run_eq(run_scr)
+        one_run_eq()
     
     if (base_info.atm_name is not None) and (base_info.wav_name is None):
         #print ' > ATM2OCN for ',len ( base_info.atm_netcdf_file_names), 'cases.'
@@ -658,7 +652,7 @@ def main():
             txt1 = '  > '+ atm_file
             logf(txt1,log_file)                
             
-            one_run_eq(run_scr)
+            one_run_eq()
             txt1 = '................................................... \n\n'
             logf(txt1,log_file) 
     
@@ -672,7 +666,7 @@ def main():
             #print '  > ',wav_file
             txt1 = '  > '+ wav_file
             logf(txt1,log_file)             
-            one_run_eq(run_scr)
+            one_run_eq()
             txt1 = '................................................... \n\n'
             logf(txt1,log_file) 
     
@@ -691,7 +685,7 @@ def main():
                       '     ATMFile> ' + base_info.atm_netcdf_file_names[ifile]
                logf(txt1,log_file)  
             
-               one_run_eq(run_scr)
+               one_run_eq()
                txt1 = '................................................... \n\n'
                logf(txt1,log_file) 
 
@@ -705,7 +699,7 @@ def main():
                txt1 = '  > '+ atm_file
                logf(txt1,log_file)                
             
-               one_run_eq(run_scr)
+               one_run_eq()
                txt1 = '................................................... \n\n'
                logf(txt1,log_file) 
 
@@ -719,7 +713,7 @@ def main():
 
 if __name__ == '__main__':
 
-    run_scr,log_file = get_run_scr()
+    log_file = get_run_scr()
     main()
 
     
