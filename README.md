@@ -42,12 +42,12 @@ a specialized prep job in which `RUN_TYPE` is set to `tide_spinup`:
 
     $ sbatch jnsem_prep_spinup.ecf  
   
-d) Once to inputs are prepared, execute the specialized spinup forecast job, in which `RUN_TYPE` is set to `tide_spinup`:   
+d) Once the inputs are prepared, execute the specialized spinup forecast job, in which `RUN_TYPE` is set to `tide_spinup`:   
 
     $ sbatch jnsem_forecast_spinup.ecf  
   
 e) The previous step will produce hotstart (restart) files of the spun-up model in the directory 
-${GESROOT}/para/nsem.${PDY}/${STORM}/hotfiles. Now the full forecast run sequence can be carried out. Start by specifying
+`${GESROOT}/para/nsem.${PDY}/${STORM}/hotfiles`. Now the full forecast run sequence can be carried out. Start by specifying
 the coupled model configuration using the environment variable `RUN_TYPE`, e.g.:
 
     $ setenv RUN_TYPE atm2wav2ocn  
@@ -72,7 +72,7 @@ g) The working directory of these runs is located in the scratch space:
    
     ${DATAROOT}/${STORM}.${RUN_TYPE}.${PDY}  
    
-h) The model output (after running the post job) are located in the scratch space under:  
+h) The model output (after running the post job) is located in the scratch space under:  
    
     ${COMROOT}/nsem/para/${STORM}.${RUN_TYPE}.${PDY}  
    
