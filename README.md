@@ -3,7 +3,7 @@
 ## Overview  
   
 This is a workflow developed to perform post-storm assessments for NOAA's COASTAL Act 
-using the NEMS/NUOPC/ESMF coupling framework. The coupled model components managed by 
+using the NEMS/NUOPC/ESMF coupling framework (see Figure 1). The coupled model components managed by 
 this workflow is ADCIRC, unstructured WAVEWATCH III, and the National Water Model. 
 Atmospheric forcing is provided by a data model, reading pre-prepared fields.  
   
@@ -79,6 +79,9 @@ h) The model output (after running the post job) is located in the scratch space
 i) The restart files for subsequent runs are located in the scratch space under:  
    
     ${GESROOT}/para/nsem.${PDY}/${STORM}  
+
+![](docs/nsem-workflow-060520.png)  
+Figure 1: Workflow diagram of NSEM deployed in Hera or WCOSS. Model data to be hosted in the Coastal Wind and Water Event Database (CWWED).
 
 ## Disclaimer  
   
