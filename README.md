@@ -23,48 +23,60 @@ binaries from the NEMS app ADC-WW3-NWM-DATM:
 In the sub-directories `$NSEMdir/ecf/` and `$NSEMdir/jobs/`, set up the location of the scratch space to run 
 the application in the following root environment variables:  
   
-    $DATA  
+    $DATAROOT  
     $GESROOT  
     $COMROOT  
   
 ## Perform a post-storm assessment  
+   
+a) Change directory to the ecFLow scripts:
   
-a) Set the storm for which to perform the assessment, e.g.:  
+    $ cd $NSEMdir/ecf  
+
+b) Set the storm for which to perform the assessment, e.g.:  
 
     $ setenv STORM shinnecock  
+   
+c) For this storm, first perform the tidal spinup with ADCIRC, starting with a prep step. For this we use 
+a specialized prep job in which `RUN_TYPE` is set to `tide_spinup`:  
+
+    $ sbatch jnsem_prep_spinup.ecf  
   
-b) Set the type of model run, e.g.:  
+d) Once to inputs are prepared, execute the specialized spinup forecast job, in which `RUN_TYPE` is set to `tide_spinup`:   
 
-    $ setenv RUN_TYPE tide_spinup  
+    $ sbatch jnsem_forecast_spinup.ecf  
   
-c) Run the prep, forecast and post jobs that comprises the complete model run:
-
-    $ sbatch jnsem_prep.ecf  
-    $ sbatch jnsem_forecast.ecf  
-    $ sbatch jnsem_post.ecf  
-
-d) Repeat steps (c) as needed to perform the tidal spinup, and subsequently the coupled 
-model run. For example, a typical sequence is:
-
-    $ setenv RUN_TYPE tide_spinup  
-    $ sbatch jnsem_prep.ecf  
-    $ sbatch jnsem_forecast.ecf  
-    $ sbatch jnsem_post.ecf  
+e) The previous step will produce hotstart (restart) files of the spun-up model in the directory 
+${GESROOT}/para/nsem.${PDY}/${STORM}/hotfiles. Now the full forecast run sequence can be carried out. Start by specifying
+the coupled model configuration using the environment variable `RUN_TYPE`, e.g.:
 
     $ setenv RUN_TYPE atm2wav2ocn  
+
+Currently the following `RUN_TYPE` options are supported:  
+
+    'tide_baserun'        # Tide-only forecast run with ADCIRC
+    'best_track2ocn'      # Best-track ATMdata used to force live ADCIRC  
+    'wav&best_track2ocn'  # Best-track ATMdata and WAVdata used to force live ADCIRC  
+    'atm2ocn'             # ATMdata used to force live ADCIRC  
+    'wav2ocn'             # WAVdata used to force live ADCIRC  
+    'atm&wav2ocn'         # ATMdata and WAVdata used to force live ADCIRC  
+    'atm2wav2ocn'         # ATMdata used to force live ADCIRC and WW3   
+
+f) Now sequentially run the prep, forecast and post jobs that comprise the complete coupled model run for the selected `RUN_TYPE`:
+
     $ sbatch jnsem_prep.ecf  
     $ sbatch jnsem_forecast.ecf  
     $ sbatch jnsem_post.ecf  
    
-e) The working directory of these runs is located in the scratch space:   
+g) The working directory of these runs is located in the scratch space:   
    
-    ${STORM}.${RUN_TYPE}.${PDY}  
+    ${DATAROOT}/${STORM}.${RUN_TYPE}.${PDY}  
    
-f) The model output (after running the post job) are located in the scratch space under:  
+h) The model output (after running the post job) are located in the scratch space under:  
    
     ${COMROOT}/nsem/para/${STORM}.${RUN_TYPE}.${PDY}  
    
-g) The restart files for subsequent runs are located in the scratch space under:  
+i) The restart files for subsequent runs are located in the scratch space under:  
    
     ${GESROOT}/para/nsem.${PDY}/${STORM}  
 
