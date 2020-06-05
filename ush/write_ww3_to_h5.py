@@ -1,3 +1,26 @@
+# ----------------------------------------------------------- 
+# Python Script File
+# Tested Operating System(s): RHEL 7, Python 3.7.5
+# Tested Run Level(s): 
+# Shell Used: BASH shell
+# Original Author(s): Andre van der Westhuysen
+# File Creation Date: 05/15/2020
+# Date Last Modified: 06/01/2020
+#
+# Version control: 1.00
+#
+# Support Team:
+#
+# Contributors:
+#
+# ----------------------------------------------------------- 
+# ------------- Program Description and Details ------------- 
+# ----------------------------------------------------------- 
+#
+# Convert WW3 ounp NetCDF4 point output to pandas-style dataframe in HDF5 format
+#
+# -----------------------------------------------------------
+
 from matplotlib import pyplot as plt
 import numpy as np
 import pandas as pd
