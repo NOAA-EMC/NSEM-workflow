@@ -94,7 +94,7 @@ def logf(txt1,log_file):
     os.system('echo "'+ txt1+ '" >> '+ log_file )
     os.system('echo "'+ txt1+ '"')
 ###########################################
-def get_run_scr():
+def get_run_log():
     # run dir setting 
     curr_time  = time.strftime("%Y%m%d_h%H_m%M_s%S")
     #run_scr    = os.path.join(RUNdir, base_info.RunName+'_'+base_info.Ver+'_' + curr_time + '.sh' )
@@ -401,26 +401,6 @@ def prep_nems(run_dir):
             logf(txt1,log_file)                  
             os.system ('mkdir -p  ' +  atm_dir                                   )
             os.system ('cp    -f  ' +  atm_inp_file + ' ' + atm_rundir_file      )               
-    
-"""    
-    txt1 = '   > Prepare qsub.sh  ..'
-    logf(txt1,log_file)   
-    
-    #prepare run scr
-    qsub       = os.path.join(run_dir,'slurm.sh')
-    #
-    dr={}
-    #dr.update({'modfile'  :modfile   })
-    dr.update({'NumProc'  :str(total_pets)  })
-    dr.update({'WallTime' :base_info.WallTime      })
-    dr.update({'Queue'    :base_info.Queue         })
-    dr.update({'RunName'  :(base_info.RunName+base_info.Ver) })
-    #nsem_utils.tmp2scr(filename=qsub ,tmpname='qsub.template',d=dr)
-    nsem_utils.tmp2scr(filename=qsub ,tmpname=base_info.qsub_tempelate,d=dr)
-    
-    os.system('cp -fr '+ base_info.qsub_tempelate +' ' +run_dir+'/scr/')
-    os.system('cp -fr   run*.sh           '            +run_dir)
-"""
 
 def get_tidal_fact(run_dir):
     """
@@ -588,22 +568,6 @@ def plot_domain_decomp(run_dir):
     txt1 = ' > Finished plotting domain decomposition ..'
     logf(txt1,log_file)          
 ########
-def main0():
-    prep_adc()
-
-    #if base_info.atm_name is not None:
-    #    prep_atm()
-    # 
-    #if base_info.wav_name is not None:
-    #    prep_wav()
-
-    prep_nems()
-    #change_nws() No need for this any more
-    
-    back_up_codes()
-    
-    #plot_domain_decomp()
-
 def one_run_eq():
     run_dir = RUNdir
     #os.system('echo "cd  ' + run_dir +' " >> ' + run_scr )
@@ -713,27 +677,6 @@ def main():
 
 if __name__ == '__main__':
 
-    log_file = get_run_scr()
+    log_file = get_run_log()
     main()
 
-    
-    
-    
-    
-"""    
-    else:     
-        avail_options = [
-#                'tide_spinup',
-#                'tide_baserun',
-                'best_track2ocn',
-                'wav&best_track2ocn',
-#                'atm2ocn',
-#                'wav2ocn',
-#                'atm&wav2ocn',    
-                ]
-    
-    
-        for run_option in avail_options:
-            base_info.run_option = run_option
-            main()
-"""
