@@ -1,0 +1,97 @@
+#!/bin/sh 
+ 
+date
+export PS4=' $SECONDS + ' 
+set -x 
+ 
+export pgm="NWPS"
+export pgmout=OUTPUT.$$
+ 
+export KEEPDATA="YES"     # TODO - to see
+
+PDY="$(date +'%Y%m%d')"
+
+# temp location of the job working directory, typically $DATAROOT/$jobid 
+export DATA=${DATA:-${DATAROOT:?}/$jobid}
+mkdir -p $DATA   
+cd $DATA
+
+####################################
+# Specify NET and RUN Name and model
+####################################
+export NET=${model}
+#export RUN=$(echo ${job}|awk -F"_" '{print $2}')
+
+####################################
+# SENDECF  - Flag Events on ECFLOW
+# SENDCOM  - Copy Files From TMPDIR to $COMOUT
+# SENDDBN  - Issue DBNet Client Calls
+####################################
+export SENDCOM=${SENDCOM:-YES}
+export SENDECF=${SENDECF:-YES}
+export SENDDBN=${SENDDBN:-NO}
+
+####################################
+# Specify Execution Areas
+####################################
+export HOMEnsem=${NWROOT}
+export FIXnsem=${FIXnsem:-${HOMEnsem}/fix}
+export EXECnsem=${EXECnsme:-${HOMEnsem}/exec}
+export SORCnsem=${SORCnsem:-${HOMEnsem}/sorc}
+export PARMnsem=${PARMnsem:-${HOMEnsem}/parm}
+export USHnsem=${USHnsem:-${HOMEnsem}/ush}
+
+# Set processing DIRs here
+export INPUTdir=${INPUTdir:-${DATA}/input}
+export RUNdir=${RUNdir:-${DATA}/run}
+export TMPdir=${TMPdir:-${DATA}/tmp}
+export LOGdir=${LOGdir:-${DATA}/logs}
+
+# Set NWPS run conditions
+export DEBUGGING=${DEBUGGING:-TRUE}
+export DEBUG_LEVEL=${DEBUG_LEVEL:-1}
+export ISPRODUCTION=${ISPRODUCTION:-TRUE}
+export SITETYPE=${SITETYPE:-EMC}
+
+##############################################
+# Define COM directory
+##############################################
+# com directory for current model's output data, typically $COMROOT/$NET/$envir/$RUN.$PDY
+export COMOUT=${COMROOT}/${envir}/${NET}/tide_spinup.${PDY}
+# nwges directory for output guess fields; typically $GESROOT/$envir
+export GESOUT=${GESROOT}/${envir}/${NET}/tide_spinup.${PDY}
+# nwges directory for input guess fields; typically $GESROOT/$envir
+export GESIN=${GESROOT}/${envir}/${NET}/tide_spinup
+
+
+# loop over nems.configure per model, also must match run_name
+# COMIN com directory for current model's input data, typically $COMROOT/$NET/$envir/$RUN.$PDY 
+# COMINmodel com directory for incoming data from model model 
+export COMINatm=${COMROOT}/${NET}/${envir}/${job}/atm
+export COMINwave=${COMROOT}/${NET}/${envir}/${job}/ww3
+export COMINadc=${COMROOT}/${NET}/${envir}/${job}/adcirc
+export COMINmeshdata=${COMROOT}/${NET}/${envir}/${job}/atmesh
+export COMINnwm=${COMROOT}/${NET}/${envir}/${job}/nwm
+
+mkdir -p $INPUTdir $RUNdir $TMPdir $LOGdir $COMOUT $GESOUT
+##############################################
+# Execute the script
+${HOMEnsem}/scripts/extide_spinup.sh
+##############################################
+
+#startmsg
+msg="JOB $job HAS COMPLETED NORMALLY."
+# postmsg $jlogfile "$msg"
+
+if [ -e $pgmout ]; then
+    cat $pgmout
+fi
+
+cd $DATAROOT
+
+if [ "$KEEPDATA" != YES ]; then
+    rm -rf $DATA
+fi
+
+date
+

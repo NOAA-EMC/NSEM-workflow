@@ -1,0 +1,26 @@
+#%Module######################################################################
+
+module load EnvVars/1.0.0
+module use /usrx/local/dev/modulefiles
+module load ics/16.0.3 lsf NetCDF/4.2/serial ibmpe ESMF/700-ics1603 HDF5/1.8.9/serial z/v1.2.6
+
+##
+## load nwprod2 libraries
+##
+module load bacio/v2.0.2
+module load w3nco/v2.0.6
+module load w3emc/v2.2.0
+module load sp/v2.0.2
+module load sigio/v2.0.1
+module load sfcio/v1.0.0
+module load g2/v2.5.0
+module load g2c/v1.5.0
+module load g2tmpl/v1.4.0
+module load crtm/v2.0.6
+module load xmlparse/v2.0.0
+module load jasper/v1.900.1
+
+
+module use -a /usrx/local/nceplibs/modulefiles
+module load nemsio/v2.2.3
+

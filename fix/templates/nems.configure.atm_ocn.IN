@@ -1,0 +1,32 @@
+$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c
+$c$c$c$c  NEMS Run-Time Configuration File  $c$c$c$c$c
+$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c
+
+$c EARTH $c
+EARTH_component_list: ATM OCN
+EARTH_attributes::
+  Verbosity = max
+::
+
+$c ATM $c
+ATM_model:                      $_atm_model_
+ATM_petlist_bounds:             $_atm_petlist_bounds_
+ATM_attributes::
+  Verbosity = max
+::
+
+$c OCN $c
+OCN_model:                      $_ocn_model_
+OCN_petlist_bounds:             $_ocn_petlist_bounds_
+OCN_attributes::
+  Verbosity = max
+::
+
+$c Run Sequence $c
+runSeq::
+  @$_coupling_interval_sec_
+    ATM -> OCN   :remapMethod=redist
+    ATM
+    OCN
+  @
+::

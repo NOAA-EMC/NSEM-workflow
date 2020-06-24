@@ -1,0 +1,7 @@
+#%Module######################################################################
+# This script is responsible for loading modules that are compatible with
+# the NUOPC Layer version used in NEMS.
+
+module load  EnvVars/1.0.0
+module load ibmpe lsf NetCDF/4.2/serial ESMF/700
+module load ics/15.0.3

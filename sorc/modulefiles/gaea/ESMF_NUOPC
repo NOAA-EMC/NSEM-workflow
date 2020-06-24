@@ -1,0 +1,9 @@
+#%Module######################################################################
+  module swap PrgEnv-intel
+  module swap intel/14.0.2.144
+  module swap cray-mpich
+  module swap cray-libsci
+  module load cray-netcdf
+  module load subversion/1.9.3
+  module use ~Gerhard.Theurich/Modulefiles
+  module load esmf/7.0.0

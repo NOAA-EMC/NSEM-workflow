@@ -1,0 +1,65 @@
+#!/bin/sh -l
+
+#SBATCH -A coastal
+#SBATCH -q test
+#SBATCH -e jtide_spinup.err.log
+#SBATCH --output=jtide_spinup.out.log
+#SBATCH --ignore-pbs
+#SBATCH -J jtide_spinup.job
+#SBATCH --mail-user=??
+#SBATCH --ntasks-per-node=780
+#SBATCH -N 34
+#SBATCH --parsable
+#SBATCH -t 36
+
+#%include <head.h>
+#%include <envir.h> 
+
+# base name of model directory (i.e. storm)
+export model=shinnecock          
+
+# set to test during the initial testing phase, para when running 
+# in parallel (on a schedule), and prod in production
+export envir=para
+
+export DEVWCOSS_USER=$(whoami)
+
+# models input/output location
+export COMROOT=/scratch2/COASTAL/coastal/scrub/com/nsem
+
+# models restart/spinup files location
+export GESROOT=/scratch2/COASTAL/coastal/scrub/com/nsem/nwgs
+
+# root directory for application, typically /nw$envir 
+export NWROOT=/scratch2/COASTAL/coastal/save/NAMED_STORMS/NSEM-workflow
+
+# unique job name (unique per day and environment), run_name
+export job=jtide_spinup
+export jobid=$job.$$
+
+# temp directory containing the working directory, often /tmpnwprd1 in production 
+export DATAROOT=/tmp/shinnecock
+   
+
+# dev environment jlogfile
+mkdir -p ${COMROOT}/logs/${envir}
+export jlogfile=${COMROOT}/logs/${envir}/jlogfile.${job}
+
+# call the jjob script
+${NWROOT}/jobs/JTIDE_SPINUP
+
+
+#%manual
+######################################################################
+# Task script:     jtide_spinup
+# Last modifier:   Andre van der Westhuysen
+# Organization:    NOAA/NCEP/EMC/NOS/OWP
+# Date:            Jun. 24, 2020
+# Purpose: To execute the job for ADC-WW3-NWM model
+######################################################################
+######################################################################
+# Job specific troubleshooting instructions:
+# see generic troubleshoot manual page
+#
+######################################################################
+#%end
