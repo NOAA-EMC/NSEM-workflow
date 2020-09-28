@@ -22,6 +22,7 @@
 # -----------------------------------------------------------
 
 import os, sys
+import subprocess as sp
 
 # Get enviroment vars from ecFlow scripting
 ROOTDIR = os.getenv('ROOTDIR')
@@ -37,6 +38,10 @@ RUN_TYPE = os.getenv('RUN_TYPE')
 USHnsem = os.getenv('USHnsem')
 sys.path.append(USHnsem)
 import nsem_utils
+import plot_ww3_unstr
+print('Inherited methods:')
+print(dir(nsem_utils))
+print(dir(plot_ww3_unstr))
 
 # Select appropriate base_info according selected storm
 try:
@@ -61,10 +66,10 @@ if (RUN_TYPE == 'tide_spinup') | \
    (RUN_TYPE == 'atm&wav2ocn') | \
    (RUN_TYPE == 'atm2wav2ocn'):
    #--- Process ADCIRC output --- 
-   print("Moving the ADCIRC NetCDF files to COMOUT...")
-   os.system('mv fort.61.nc ${COMOUT}')  # Elevation Time Series at Specified Elevation Recording Stations
-   os.system('mv fort.63.nc ${COMOUT}')  # Elevation Time Series at All Nodes in the Model Grid
-   os.system('mv fort.64.nc ${COMOUT}')  # Depth-averaged Velocity Time Series at All Nodes in the Model Grid
+   print("Copying the ADCIRC NetCDF files to COMOUT...")
+   os.system('cp -p fort.61.nc ${COMOUT}/')  # Elevation Time Series at Specified Elevation Recording Stations
+   os.system('cp -p fort.63.nc ${COMOUT}/')  # Elevation Time Series at All Nodes in the Model Grid
+   os.system('cp -p fort.64.nc ${COMOUT}/')  # Depth-averaged Velocity Time Series at All Nodes in the Model Grid
 
 if RUN_TYPE == 'atm2wav2ocn':
    #--- Process WW3 output ---
@@ -73,9 +78,9 @@ if RUN_TYPE == 'atm2wav2ocn':
 
    # Populate the postprocessing input template
    print("Postprocessing the WW3 binary output to NetCDF...")
-   #os.system('MESHFILE=$(ls -t *.msh | head -1')
-   #os.system('echo ${MESHFILE}')
-   f=open(RUNdir+'/inlet.msh')
+   MESHFILE = sp.getoutput('ls -t *.msh | head -1')
+   print('Opening mesh file: '+RUNdir+'/'+MESHFILE)
+   f=open(RUNdir+'/'+MESHFILE)
    lines=f.readlines()
    nnodes = lines[4]
 
@@ -87,11 +92,46 @@ if RUN_TYPE == 'atm2wav2ocn':
    ww3_ounf = os.path.join(RUNdir,'ww3_ounf.inp')
    nsem_utils.tmp2scr(filename=ww3_ounf,tmpname=tmpname,d=dc_ww3_ounf)
 
-   os.system('cp ${FIXnsem}/templates/ww3_ounf.inp ${RUNdir}')
    os.system('${EXECnsem}/ww3_ounf ww3_ounf.inp > ww3_ounf.out')
 
+   # Create field plots of WW3 variables
+   print("Creating field plots...") 
+   # Wave heights
+   DATAFILE = sp.getoutput('ls -t ww3*hs*.nc | head -1')
+   print('Plotting fields for STORM, DATAFILE: '+STORM+', '+DATAFILE)
+   plot_ww3_unstr.plot_hs(storm=STORM, datafile1=DATAFILE) 
+   # Peak wave frequency
+   DATAFILE = sp.getoutput('ls -t ww3*fp*.nc | head -1')
+   print('Plotting fields for STORM, DATAFILE: '+STORM+', '+DATAFILE)
+   plot_ww3_unstr.plot_fp(storm=STORM, datafile1=DATAFILE)
+   # Peak wave direction
+   DATAFILE = sp.getoutput('ls -t ww3*dp*.nc | head -1')
+   print('Plotting fields for STORM, DATAFILE: '+STORM+', '+DATAFILE)
+   plot_ww3_unstr.plot_dp(storm=STORM, datafile1=DATAFILE)
+   # Water levels
+   DATAFILE = sp.getoutput('ls -t ww3*wlv*.nc | head -1')
+   DATAFILE2 = sp.getoutput('ls -t ww3*dpt*.nc | head -1')
+   print('Plotting fields for STORM, DATAFILE: '+STORM+', '+DATAFILE+', '+DATAFILE2)
+   plot_ww3_unstr.plot_wlv(storm=STORM, datafile1=DATAFILE, datafile2=DATAFILE2)
+   # Currents
+   DATAFILE = sp.getoutput('ls -t ww3*cur*.nc | head -1')
+   print('Plotting fields for STORM, DATAFILE: '+STORM+', '+DATAFILE)
+   plot_ww3_unstr.plot_cur(storm=STORM, datafile1=DATAFILE)
+   # Wind fields
+   DATAFILE = sp.getoutput('ls -t ww3*wnd*.nc | head -1')
+   print('Plotting fields for STORM, DATAFILE: '+STORM+', '+DATAFILE)
+   plot_ww3_unstr.plot_wnd(storm=STORM, datafile1=DATAFILE)
+
+   os.system('tar -czvf plots_nsem_'+STORM+'.tgz nsem_'+STORM+'*.png')
+
+   # Point outout
+   os.system('cp ${FIXnsem}/templates/ww3_ounp.inp ${RUNdir}')
+   os.system($NSEMdir/exec/ww3_ounp ww3_ounp.inp > ww3_ounp.out)
+
    # Move the output to COMOUT
-   print("Moving the WW3 NetCDF files to COMOUT...")
-   os.system('mv ww3*.nc ${COMOUT}')
+   print("Copying the WW3 NetCDF files to COMOUT...")
+   os.system('cp -p ww3.field*.nc ${COMOUT}/')
+   print("Moving the WW3 plots to COMOUT...")
+   os.system('cp -p plots_nsem_'+STORM+'.tgz ${COMOUT}/')
 
 print("Completed NSEM post.")
