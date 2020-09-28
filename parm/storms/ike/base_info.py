@@ -206,6 +206,7 @@ elif run_option == 'atm2wav2ocn':
     ww3_multi_tmpl  = 'ww3_multi.inp.tmpl'
     ww3_ounf_tmpl   = 'ww3_ounf.inp.tmpl'
     wbound_flg      = False
+    wbound_type     = 'nc'
     #Time
     start_date      = tide_spin_start_date  #current time is set by hotfile therefore we should use the same start time as 1st spinup
     start_date_nems = tide_spin_end_date
