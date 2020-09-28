@@ -29,7 +29,7 @@ echo "=         RUN TYPE: ${RUN_TYPE}                              "
 echo "=                                                            "
 echo "============================================================="
 # 
-python ${USHnsem}/postproc-nsemodel.py
+python ${USHnsem}/postproc-nsemodel.py > ${LOGdir}/jnsem_post.log
 
 echo "Post-procession completed"
 exit 0
