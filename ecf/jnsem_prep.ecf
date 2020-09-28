@@ -15,6 +15,7 @@
 #SBATCH -q batch
 #SBATCH --time=00:30:00
 #SBATCH --ntasks=1
+#SBATCH --mem 64000M
 #SBATCH --mail-user=andre.vanderwesthuysen@noaa.gov
 #SBATCH --mail-type=ALL
 #SBATCH --output=jnsem_prep.out.log
