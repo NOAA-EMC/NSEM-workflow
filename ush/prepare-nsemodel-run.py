@@ -178,7 +178,7 @@ def prep_adc(run_dir):
     if GESIN is not None:
         #print ' > Copy HotStart input file from >', base_info.fetch_hot_from
     """
-    txt1 = ' > Copy HotStart input file from >  '+ GESIN
+    txt1 = ' > Copy ADCIRC HotStart input file from >  '+ GESIN
     logf(txt1,log_file) 
         
     hot_file = os.path.join(GESIN,'hotfiles','fort.67.nc')
@@ -222,21 +222,35 @@ def prep_ww3(run_dir):
     if base_info.wbound_flg:
        # Process WW3 boundary conditions
        txt1 = ' > Processing WW3 boundary conditions...'
-       logf(txt1,log_file) 
-       os.system('cp -f ${COMINwave}/*.spc ' + run_dir)
-       os.system('cp -f ' + ww3_grd_inp + '/ww3_bound.inp ' + run_dir)
-       os.system('${EXECnsem}/ww3_bound ww3_bound.inp > ww3_bound.out')
+       if base_info.wbound_type == 'spc':
+          logf(txt1,log_file) 
+          os.system('cp -f ${COMINwave}/*.spc ' + run_dir)
+          os.system('cp -f ' + ww3_grd_inp + '/ww3_bound.inp ' + run_dir)
+          os.system('${EXECnsem}/ww3_bound ww3_bound.inp > ww3_bound.out')
+       if base_info.wbound_type == 'nc':
+          logf(txt1,log_file) 
+          os.system('cp -f ${COMINwave}/*.nc ' + run_dir)
+          os.system('cp -f ${COMINwave}/ww3_bounc.inp ' + run_dir)
+          os.system('${EXECnsem}/ww3_bounc ww3_bounc.inp > ww3_bounc.out')
        os.system('mv nest.ww3 nest.inlet')  
     ##########
     dc_ww3_multi={}
     dc_ww3_multi.update({'start_pdy'    :base_info.tide_spin_end_date.strftime("%Y%m%d %H%M%S") })
     dc_ww3_multi.update({'end_pdy'      :base_info.wave_spin_end_date.strftime("%Y%m%d %H%M%S") })
     dc_ww3_multi.update({'dt_out_sec'   :3600  })
+    dc_ww3_multi.update({'dt_hot_sec'   :int(base_info.hot_wave_out) })
     ##
     tmpname = os.path.join(FIXnsem, 'templates', base_info.ww3_multi_tmpl)
     ww3_multi = os.path.join(run_dir,'ww3_multi.inp')
     nsem_utils.tmp2scr(filename=ww3_multi,tmpname=tmpname,d=dc_ww3_multi)
     #os.system('cp -fr  ' +   tmpname          +'  '   +run_dir+'/scr/') 
+
+    txt1 = ' > Copy WW3 HotStart input file from >  '+ GESIN
+    logf(txt1,log_file) 
+        
+    hot_file = os.path.join(GESIN,'hotfiles','restart001.inlet')
+    os.system('cp -f ' + hot_file +' ' + run_dir)        
+    os.system('mv restart001.inlet restart.inlet')
 
 def prep_nems(run_dir):
     """
