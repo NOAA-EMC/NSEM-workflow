@@ -11,10 +11,11 @@
 # ----------------------------------------------------------- 
 
 #SBATCH --account=coastal
-#SBATCH --job-name=jnsem_post
+#SBATCH --job-name=jnsem_po
 #SBATCH -q batch
-#SBATCH --time=00:30:00
+#SBATCH --time=02:00:00
 #SBATCH --ntasks=1
+#SBATCH --mem 64000M
 #SBATCH --mail-user=andre.vanderwesthuysen@noaa.gov
 #SBATCH --mail-type=ALL
 #SBATCH --output=jnsem_post.out.log
