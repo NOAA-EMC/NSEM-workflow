@@ -26,12 +26,12 @@ date
 set -xa
 
 # Check for env variables
-if [ "${STORM}" != "shinnecock" ] && 
-   [ "${STORM}" != "ike" ]
-    then 
-    echo "*** ERROR - Your STORM environment variable is not set, or not valid. Valid options are:"
-    echo "shinnecock"
-    echo "ike"
+export stormlist=`ls ${NSEMdir}/parm/storms`
+if [[ ${stormlist} != *${STORM}* ]]; then
+    echo "*** ERROR - Your STORM environment variable is not set, or not valid."
+    echo 'Requested storm: '${STORM}
+    echo 'Valid options are: '${stormlist}
+    echo "*** If you are modeling a new storm, add it to the list of valid storms in $NSEMdir/parm/storms"
     exit 1
 fi
 if [ "${RUN_TYPE}" != "tide_spinup" ] && 
