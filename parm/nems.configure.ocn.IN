@@ -5,14 +5,14 @@ $c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c$c
 $c EARTH $c
 EARTH_component_list: OCN
 EARTH_attributes::
-  Verbosity = max
+  Verbosity = high
 ::
 
 $c OCN $c
 OCN_model:                      $_ocn_model_
 OCN_petlist_bounds:             $_ocn_petlist_bounds_
 OCN_attributes::
-  Verbosity = max
+  Verbosity = high
 ::
 
 $c Run Sequence $c
