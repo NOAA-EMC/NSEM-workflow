@@ -126,7 +126,7 @@ if RUN_TYPE == 'atm2wav2ocn':
 
    # Point outout
    os.system('cp ${FIXnsem}/templates/ww3_ounp.inp ${RUNdir}')
-   os.system($NSEMdir/exec/ww3_ounp ww3_ounp.inp > ww3_ounp.out)
+   os.system('$NSEMdir/exec/ww3_ounp ww3_ounp.inp > ww3_ounp.out')
 
    # Move the output to COMOUT
    print("Copying the WW3 NetCDF files to COMOUT...")
