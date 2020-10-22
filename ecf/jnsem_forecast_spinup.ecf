@@ -12,8 +12,9 @@
 
 #SBATCH --account=coastal
 #SBATCH --job-name=jnsem_fcst
-#SBATCH -q batch
-#SBATCH --time=01:00:00
+#SBATCH -q debug
+#SBATCH --time=00:30:00
+##SBATCH --ntasks=720
 #SBATCH --ntasks=11
 #SBATCH --mail-user=andre.vanderwesthuysen@noaa.gov
 #SBATCH --mail-type=ALL
@@ -30,7 +31,7 @@ export MODEL=${model^^}
 export envir="para"
 
 export DEVWCOSS_USER=$(whoami)
-export COMROOT=/scratch2/NCEPDEV/stmp1/${USER}/data/com
+export COMROOT=/scratch2/COASTAL/coastal/save/com
 
 #Dev environment value for $job and $jobid
 export job=pnsem_forecast
