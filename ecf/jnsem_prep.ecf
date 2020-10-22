@@ -31,7 +31,7 @@ export MODEL=${model^^}
 export envir="para"
 
 export DEVWCOSS_USER=$(whoami)
-export COMROOT=/scratch2/NCEPDEV/stmp1/${USER}/data/com
+export COMROOT=/scratch2/COASTAL/coastal/save/com
 
 #Dev environment value for $job and $jobid
 export job=pnsem_prep
