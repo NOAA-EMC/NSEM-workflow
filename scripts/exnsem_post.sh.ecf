@@ -24,12 +24,18 @@
 
 echo "============================================================="
 echo "=                                                            "
-echo "=         RUNNING NSEM FOR STORM: ${STORM}                   "
-echo "=         RUN TYPE: ${RUN_TYPE}                              "
+echo "=      RUNNING POSTPROCESSING NSEM FOR STORM: ${STORM}       "
+echo "=      RUN TYPE: ${RUN_TYPE}                                 "
 echo "=                                                            "
 echo "============================================================="
 # 
-python ${USHnsem}/postproc-nsemodel.py > ${LOGdir}/jnsem_post.log
+echo "Plotting output fields..."
+python ${USHnsem}/postproc-nsemodel.py
+echo "Formatting point output..."
+python ${USHnsem}/extract_ww3_pnt.py
+python ${USHnsem}/extract_adcirc_pnt.py
+echo "Performing 90% accuracy assessment..."
+python ${USHnsem}/postproc-nsemodel-ttest.py
 
-echo "Post-procession completed"
+echo "Post-processing completed"
 exit 0
