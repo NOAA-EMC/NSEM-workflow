@@ -26,8 +26,13 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from datetime import datetime
+import cartopy	
+import cartopy.crs as ccrs	
+import cartopy.feature as cfeature
 
+NSEMdir = os.environ['NSEMdir']
 RUNdir = os.getenv('RUNdir')
+PARMnsem = os.getenv('PARMnsem')
 FIXnsem = os.getenv('FIXnsem')
 USHnsem = os.getenv('USHnsem')
 STORM = os.getenv('STORM')
@@ -35,26 +40,26 @@ sys.path.append(USHnsem)
 import nsem_ttest
 import nsem_utils
 
-os.chdir(RUNdir)
-print("Executing in", RUNdir)
+sys.path.append(PARMnsem+'/storms/'+STORM)
+import base_info
 
 def run_ttest(model, obs, label, units):
    
-   p_array = np.zeros(model.shape[1]-1)
-   success_array = np.zeros(model.shape[1]-1)
+   p_array = np.zeros(model.shape[1])
+   success_array = np.zeros(model.shape[1])
    
-   for station in range(1,model.shape[1]):
+   for station in range(0,model.shape[1]):
       print('Processing '+model.columns[station])
-      success, pvalue1, pvalue2 = nsem_ttest.test_90_accuracy(model.iloc[:,station],obs.iloc[:,station], \
-                                                              plotflag=True,direc=RUNdir, \
-                                                              label=label+"_station_"+model.columns[station],unit=units)
-      print(station, success, pvalue1, pvalue2)
-      p_array[station-1] = min(pvalue1, pvalue2)
-      success_array[station-1] = success
+      success, pvalue1 = nsem_ttest.test_90_accuracy(model.iloc[:,station],obs.iloc[:,station], \
+                                                     plotflag=True,direc=RUNdir, \
+                                                     label=label+"_station_"+model.columns[station],unit=units)
+      print(station, success, pvalue1)
+      p_array[station] = pvalue1
+      success_array[station] = success
 
    # Bar chart
    plt.figure(figsize = [6.4, 3.8])
-   plt.bar(model.columns[1:],p_array)
+   plt.bar(model.columns[:],p_array)
    plt.axhline(y=0.05,linewidth=1, color='r')
    plt.yscale('log')
    plt.rc('xtick',labelsize=3)
@@ -65,6 +70,7 @@ def run_ttest(model, obs, label, units):
    plt.title(label,fontsize=11)
    plt.savefig(RUNdir+"/ttest_summary_"+label+".png",dpi=150,bbox_inches='tight',pad_inches=0.1)
    
+   """
    # Map display
    landbound = np.loadtxt(USHnsem+'/coastal_bound_high.txt')
    locations = pd.read_csv(RUNdir+'/ndbc_locations.txt', delim_whitespace=True)
@@ -81,22 +87,41 @@ def run_ttest(model, obs, label, units):
    plt.rc('ytick',labelsize=14)
    plt.title(label,fontsize=11)
    plt.savefig(RUNdir+"/ttest_map_"+label+".png",dpi=150,bbox_inches='tight',pad_inches=0.1)
+   """
 
    return p_array, success_array
 
+print('--- In: postproc-nsemodel-ttest.py ---')
+os.chdir(RUNdir)
+print("Executing in", RUNdir)
+
 # 1. Specify tests for covered data
-# (a) HWRF winds
-model = pd.read_csv(RUNdir+'/ModelWind.txt', delim_whitespace=True)
-obs = pd.read_csv(RUNdir+'/ObsWind.txt', delim_whitespace=True)
-label = "HWRF"
+# (a) ATM winds
+print('\nAssessing Wind results...')
+obspath = PARMnsem+'/storms/'+STORM
+print("Copying obs data from", obspath)
+os.system('cp -f ' + obspath + '/ObsWind.txt ' + RUNdir + '/')
+model = pd.read_csv(RUNdir+'/ModelWind.txt', header='infer')
+obs = pd.read_csv(RUNdir+'/ObsWind.txt', header='infer')
+label = "ATM"
 units = "U10 (m/s)"
 ### Clean obs data by setting all exception values (99.00) and zeros to nan, and forward-filling these values
 obs = obs[obs < 99.00]
 obs = obs[obs > 0.00]
 obs = obs.fillna(method='ffill')
+mask = (model['Date'] > base_info.analysis_start_date.strftime('%Y-%m-%d')) & (model['Date'] <= base_info.analysis_end_date.strftime('%Y-%m-%d'))
+model = model.loc[mask]
+model.set_index('Date', inplace=True)
+mask = (obs['Date'] > base_info.analysis_start_date.strftime('%Y-%m-%d')) & (obs['Date'] <= base_info.analysis_end_date.strftime('%Y-%m-%d'))
+obs = obs.loc[mask]
+obs.set_index('Date', inplace=True)
+print(model.head(20))
+print(model.tail(20))
+print(obs.head(20))
+print(obs.tail(20))
 p_array, success_array = run_ttest(model, obs, label, units)
-u10_best = model.columns[np.argmax(p_array)+1]  # First column is the date
-u10_worst = model.columns[np.argmin(p_array)+1]  # First column is the date
+u10_best = model.columns[np.argmax(p_array)]
+u10_worst = model.columns[np.argmin(p_array)]
 print('All stations:')
 print(model.columns)
 print('p-values for all stations:')
@@ -107,10 +132,28 @@ print('Best station is '+u10_best)
 print('Worst station is '+u10_worst)
 
 # (b) WW3 Hs
-model = pd.read_csv(RUNdir+'/ModelHs.txt', delim_whitespace=True)
-obs = pd.read_csv(RUNdir+'/ObsHs.txt', delim_whitespace=True)
+print('\nAssessing Hs results...')
+obspath = PARMnsem+'/storms/'+STORM
+print("Copying obs data from", obspath)
+os.system('cp -f ' + obspath + '/ObsHs.txt ' + RUNdir + '/')
+model = pd.read_csv(RUNdir+'/ModelHs.txt', header='infer')
+obs = pd.read_csv(RUNdir+'/ObsHs.txt', header='infer')
 label = "WW3"
 units = "Hs (m)"
+### Clean obs data by setting all exception values (99.00) and zeros to nan, and forward-filling these values
+obs = obs[obs < 99.00]
+obs = obs[obs > 0.00]
+obs = obs.fillna(method='ffill')
+mask = (model['Date'] > base_info.analysis_start_date.strftime('%Y-%m-%d')) & (model['Date'] <= base_info.analysis_end_date.strftime('%Y-%m-%d'))
+model = model.loc[mask]
+model.set_index('Date', inplace=True)
+mask = (obs['Date'] > base_info.analysis_start_date.strftime('%Y-%m-%d')) & (obs['Date'] <= base_info.analysis_end_date.strftime('%Y-%m-%d'))
+obs = obs.loc[mask]
+obs.set_index('Date', inplace=True)
+print(model.head(20))
+print(model.tail(20))
+print(obs.head(20))
+print(obs.tail(20))
 p_array, success_array = run_ttest(model, obs, label, units)
 hs_best = model.columns[np.argmax(p_array)+1]  # First column is the date
 hs_worst = model.columns[np.argmin(p_array)+1]  # First column is the date
@@ -123,6 +166,40 @@ print(success_array)
 print('Best station is '+hs_best)
 print('Worst station is '+hs_worst)
 
+# (c) WW3 WLV
+print('\nAssessing WLV results...')
+obspath = PARMnsem+'/storms/'+STORM
+print("Copying obs data from", obspath)
+os.system('cp -f ' + obspath + '/ObsWLV.txt ' + RUNdir + '/')
+model = pd.read_csv(RUNdir+'/ModelWLV.txt', header='infer')
+obs = pd.read_csv(RUNdir+'/ObsWLV.txt', header='infer')
+obs = obs[obs < 99.00]
+obs = obs.fillna(method='ffill')
+label = "ADC"
+units = "WL (m MSL)"
+mask = (model['Date'] > base_info.analysis_start_date.strftime('%Y-%m-%d')) & (model['Date'] <= base_info.analysis_end_date.strftime('%Y-%m-%d'))
+model = model.loc[mask]
+model.set_index('Date', inplace=True)
+mask = (obs['DATE'] > base_info.analysis_start_date.strftime('%Y-%m-%d')) & (obs['DATE'] <= base_info.analysis_end_date.strftime('%Y-%m-%d'))
+obs = obs.loc[mask]
+obs.set_index('DATE', inplace=True)
+print(model.head(20))
+print(model.tail(20))
+print(obs.head(20))
+print(obs.tail(20))
+p_array, success_array = run_ttest(model, obs, label, units)
+wlv_best = model.columns[np.argmax(p_array)+1]  # First column is the date
+wlv_worst = model.columns[np.argmin(p_array)+1]  # First column is the date
+print('All stations:')
+print(model.columns)
+print('p-values for all stations:')
+print(p_array)
+print('Pass (1) or fail (0) for all stations:')
+print(success_array)
+print('Best station is '+wlv_best)
+print('Worst station is '+wlv_worst)
+
+"""
 # 2. Compile automated validation report
 # (a) Find best and worst performing stations in terms of p-values
 
@@ -152,4 +229,5 @@ val_report = os.path.join(RUNdir,'validation_report_'+STORM+'_'+datetime.today()
 nsem_utils.tmp2scr(filename=val_report,tmpname=tmpname,d=dc_valreport)
 # (c) Compile the validation report to PDF
 os.system('pdflatex '+val_report)
+"""
 
