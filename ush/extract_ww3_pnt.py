@@ -260,7 +260,7 @@ if __name__ == "__main__":
                latmin=base_info.latmin_plot_landfall,
                latmax=base_info.latmax_plot_landfall)
    #df.to_pickle(RUNdir+"ModelHs.pkl")
-   df.to_csv(RUNdir+"/ModelHs.txt")
+   df.to_csv(RUNdir+"/ModelHs.csv")
 
    """
    print('\nExtracting WLV output from WW3...')
@@ -272,7 +272,7 @@ if __name__ == "__main__":
                latmin=base_info.latmin_plot_landfall,
                latmax=base_info.latmax_plot_landfall)
    #df.to_pickle(RUNdir+"ModelWLV.pkl")
-   df.to_csv(RUNdir+"/ModelWLV.txt")
+   df.to_csv(RUNdir+"/ModelWLV.csv")
    """
 
    print('\nExtracting Wind output from WW3...')
@@ -284,5 +284,5 @@ if __name__ == "__main__":
                latmin=base_info.latmin_plot_landfall,
                latmax=base_info.latmax_plot_landfall)
    #df.to_pickle(RUNdir+"ModelWind.pkl")
-   df.to_csv(RUNdir+"/ModelWind.txt")
+   df.to_csv(RUNdir+"/ModelWind.csv")
 
