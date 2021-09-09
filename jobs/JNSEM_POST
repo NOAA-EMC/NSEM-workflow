@@ -40,9 +40,11 @@ if [ "${RUN_TYPE}" != "tide_spinup" ] &&
    [ "${RUN_TYPE}" != "best_track2ocn" ] &&
    [ "${RUN_TYPE}" != "wav&best_track2ocn" ] &&
    [ "${RUN_TYPE}" != "atm2ocn" ] &&
+   [ "${RUN_TYPE}" != "atm2wav" ] &&
    [ "${RUN_TYPE}" != "wav2ocn" ] &&
    [ "${RUN_TYPE}" != "atm&wav2ocn" ] &&
-   [ "${RUN_TYPE}" != "atm2wav2ocn" ]
+   [ "${RUN_TYPE}" != "atm2wav2ocn" ] &&
+   [ "${RUN_TYPE}" != "atm2wav-ocn" ]
     then 
     echo "*** ERROR - Your RUN_TYPE environment variable is not set, or not valid. Valid options are:"
     echo "tide_spinup"
@@ -53,6 +55,7 @@ if [ "${RUN_TYPE}" != "tide_spinup" ] &&
     echo "wav2ocn"
     echo "atm&wav2ocn"
     echo "atm2wav2ocn"
+    echo "atm2wav-ocn"
     exit 1
 fi
 
@@ -112,6 +115,11 @@ export SITETYPE=${SITETYPE:-EMC}
 export COMOUT=${COMROOT}/${NET}/${envir}/${STORM}.${RUN_TYPE}.${PDY}
 export GESOUT=${GESROOT}/${envir}/${NET}.${PDY}
 export GESIN=${GESROOT}/${envir}/${NET}.${PDY}
+
+# Note: Obs data for the 10 regression cases placed in PARMnsem,
+#       but data for new storms to be placed in COM, connected to CWWED.
+export COMINobs=${PARMnsem}/storms/${STORM}
+#export COMINobs=${COMROOT}/obs/para/${STORM}
 
 #startmsg
 
