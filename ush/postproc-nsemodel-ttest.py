@@ -36,6 +36,7 @@ PARMnsem = os.getenv('PARMnsem')
 FIXnsem = os.getenv('FIXnsem')
 USHnsem = os.getenv('USHnsem')
 STORM = os.getenv('STORM')
+COMINobs = os.getenv('COMINobs')
 sys.path.append(USHnsem)
 import nsem_ttest
 import nsem_utils
@@ -98,11 +99,9 @@ print("Executing in", RUNdir)
 # 1. Specify tests for covered data
 # (a) ATM winds
 print('\nAssessing Wind results...')
-obspath = PARMnsem+'/storms/'+STORM
-print("Copying obs data from", obspath)
-os.system('cp -f ' + obspath + '/ObsWind.txt ' + RUNdir + '/')
-model = pd.read_csv(RUNdir+'/ModelWind.txt', header='infer')
-obs = pd.read_csv(RUNdir+'/ObsWind.txt', header='infer')
+os.system('cp -f ' + COMINobs + '/ObsWind.csv ' + RUNdir + '/')
+model = pd.read_csv(RUNdir+'/ModelWind.csv', header='infer')
+obs = pd.read_csv(RUNdir+'/ObsWind.csv', header='infer')
 label = "ATM"
 units = "U10 (m/s)"
 ### Clean obs data by setting all exception values (99.00) and zeros to nan, and forward-filling these values
@@ -133,11 +132,9 @@ print('Worst station is '+u10_worst)
 
 # (b) WW3 Hs
 print('\nAssessing Hs results...')
-obspath = PARMnsem+'/storms/'+STORM
-print("Copying obs data from", obspath)
-os.system('cp -f ' + obspath + '/ObsHs.txt ' + RUNdir + '/')
-model = pd.read_csv(RUNdir+'/ModelHs.txt', header='infer')
-obs = pd.read_csv(RUNdir+'/ObsHs.txt', header='infer')
+os.system('cp -f ' + COMINobs + '/ObsHs.csv ' + RUNdir + '/')
+model = pd.read_csv(RUNdir+'/ModelHs.csv', header='infer')
+obs = pd.read_csv(RUNdir+'/ObsHs.csv', header='infer')
 label = "WW3"
 units = "Hs (m)"
 ### Clean obs data by setting all exception values (99.00) and zeros to nan, and forward-filling these values
@@ -168,11 +165,9 @@ print('Worst station is '+hs_worst)
 
 # (c) WW3 WLV
 print('\nAssessing WLV results...')
-obspath = PARMnsem+'/storms/'+STORM
-print("Copying obs data from", obspath)
-os.system('cp -f ' + obspath + '/ObsWLV.txt ' + RUNdir + '/')
-model = pd.read_csv(RUNdir+'/ModelWLV.txt', header='infer')
-obs = pd.read_csv(RUNdir+'/ObsWLV.txt', header='infer')
+os.system('cp -f ' + COMINobs + '/ObsWLV.csv ' + RUNdir + '/')
+model = pd.read_csv(RUNdir+'/ModelWLV.csv', header='infer')
+obs = pd.read_csv(RUNdir+'/ObsWLV.csv', header='infer')
 obs = obs[obs < 99.00]
 obs = obs.fillna(method='ffill')
 label = "ADC"
