@@ -5,6 +5,7 @@ import pandas as pd
 NSEMdir = os.environ['NSEMdir']
 PARMnsem = os.environ['PARMnsem']
 STORM = os.getenv('STORM')
+COMINobs = os.getenv('COMINobs')
 
 sys.path.append(PARMnsem+'/storms/'+STORM)
 import base_info
@@ -32,4 +33,4 @@ for station in stations.columns:
 obs.set_index('Date', inplace=True)
 obs = obs.resample('H').mean()  # Resample to hourly
 print(obs.head(10))
-obs.to_csv(PARMnsem+'/storms/'+STORM+"/ObsHs.txt", float_format="%.3f")
+obs.to_csv(COMINobs+"/ObsHs.csv", float_format="%.3f")
