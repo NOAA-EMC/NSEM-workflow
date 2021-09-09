@@ -167,6 +167,6 @@ if __name__ == "__main__":
    df = pd.DataFrame(columns = stations.columns)
    df = extract_wlv_pnt(storm=STORM, datafile1=RUNdir+'/fort.61.nc', stations=stations, df=df)
    #df.to_pickle(RUNdir+"ModelWLV.pkl")
-   df.to_csv(RUNdir+"/ModelWLV.txt")
+   df.to_csv(RUNdir+"/ModelWLV.csv")
 
 
