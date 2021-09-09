@@ -5,6 +5,7 @@ import pandas as pd
 NSEMdir = os.environ['NSEMdir']
 PARMnsem = os.environ['PARMnsem']
 STORM = os.getenv('STORM')
+COMINobs = os.getenv('COMINobs')
 
 sys.path.append(PARMnsem+'/storms/'+STORM)
 import base_info
@@ -28,4 +29,4 @@ for station in stations.columns:
 
 obs.set_index('DATE', inplace=True)
 print(obs.head(10))
-obs.to_csv(PARMnsem+'/storms/'+STORM+"/ObsWLV.txt", float_format="%.3f")
+obs.to_csv(COMINobs+"/ObsWLV.csv", float_format="%.3f")
