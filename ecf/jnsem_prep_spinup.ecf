@@ -14,13 +14,15 @@
 #SBATCH --job-name=jnsem_prep
 #SBATCH -q batch
 #SBATCH --time=00:30:00
+#SBATCH --mem 64000M
 #SBATCH --ntasks=1
 #SBATCH --mail-user=andre.vanderwesthuysen@noaa.gov
 #SBATCH --mail-type=ALL
 #SBATCH --output=jnsem_prep_spinup.out.log
 #SBATCH --error=jnsem_prep_spinup.err.log
 
-source ${ROOTDIR}/modulefiles/hera/ESMF_NUOPC
+#source ${ROOTDIR}/modulefiles/hera/ESMF_NUOPC
+source ${ROOTDIR}/modulefiles/envmodules_intel.hera
 
 module list
 
