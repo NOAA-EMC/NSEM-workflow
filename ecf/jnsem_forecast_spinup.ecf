@@ -12,16 +12,17 @@
 
 #SBATCH --account=coastal
 #SBATCH --job-name=jnsem_fcst
-#SBATCH -q debug
-#SBATCH --time=00:30:00
-##SBATCH --ntasks=720
-#SBATCH --ntasks=11
+#SBATCH -q batch
+#SBATCH --time=08:00:00
+#SBATCH --ntasks=720
+##SBATCH --ntasks=11
 #SBATCH --mail-user=andre.vanderwesthuysen@noaa.gov
 #SBATCH --mail-type=ALL
 #SBATCH --output=jnsem_forecast_spinup.out.log
 #SBATCH --error=jnsem_forecast_spinup.err.log
 
-source ${ROOTDIR}/modulefiles/hera/ESMF_NUOPC
+#source ${ROOTDIR}/modulefiles/hera/ESMF_NUOPC
+source ${ROOTDIR}/modulefiles/envmodules_intel.hera
 
 module list
 
