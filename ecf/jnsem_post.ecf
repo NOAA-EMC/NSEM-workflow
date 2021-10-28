@@ -21,7 +21,8 @@
 #SBATCH --output=jnsem_post.out.log
 #SBATCH --error=jnsem_post.err.log
 
-source ${ROOTDIR}/modulefiles/hera/ESMF_NUOPC
+#source ${ROOTDIR}/modulefiles/hera/ESMF_NUOPC
+source ${ROOTDIR}/modulefiles/envmodules_intel.hera
 
 module list
 
@@ -31,7 +32,8 @@ export MODEL=${model^^}
 export envir="para"
 
 export DEVWCOSS_USER=$(whoami)
-export COMROOT=/scratch2/COASTAL/coastal/save/com
+#export COMROOT=/scratch2/COASTAL/coastal/save/com
+export COMROOT=/scratch2/NCEPDEV/stmp1/${USER}/data/com
 
 #Dev environment value for $job and $jobid
 export job=pnsem_post
