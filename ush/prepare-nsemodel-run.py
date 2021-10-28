@@ -79,7 +79,7 @@ print(end_date)
 #def_files
 #adcprep
 adcprep   = os.path.join(EXECnsem, 'adcprep')
-tidefac   = os.path.join(EXECnsem, 'tidefac')
+tidefac   = os.path.join(EXECnsem, 'tide_fac')
 adc_inp   = os.path.join(COMINadc)
 adc_grd_inp   = os.path.join(FIXnsem,'meshes',base_info.mesh,'ocn')
 ww3_grd_inp   = os.path.join(FIXnsem,'meshes',base_info.mesh,'wav')
@@ -589,8 +589,10 @@ def one_run_eq():
     #os.system('echo "sbatch slurm.sh    " >> ' + run_scr )
     #
     prep_nems(run_dir)
-    prep_adc(run_dir)
-    if base_info.run_option == 'atm2wav2ocn': 
+    if (base_info.run_option != 'atm2wav'):
+       prep_adc(run_dir)
+    if (base_info.run_option == 'atm2wav2ocn') or (base_info.run_option == 'atm2wav-ocn') \
+       or (base_info.run_option == 'atm2wav'): 
        prep_ww3(run_dir) 
 
     if False:
@@ -680,6 +682,20 @@ def main():
                one_run_eq()
                txt1 = '................................................... \n\n'
                logf(txt1,log_file) 
+
+    if (base_info.atm_name is not None) and (base_info.wav_name is not None) and (base_info.ocn_name is None):
+        txt1 = ' > Atm2Wav for '+str(len (base_info.atm_netcdf_file_names)) + ' cases.'
+        logf(txt1,log_file)   
+         
+        for atm_file in base_info.atm_netcdf_file_names:
+            base_info.atm_netcdf_file_name = atm_file
+            #print '  > ',atm_file
+            txt1 = '  > '+ atm_file
+            logf(txt1,log_file)                
+            
+            one_run_eq()
+            txt1 = '................................................... \n\n'
+            logf(txt1,log_file) 
 
     txt1 = '-----------------------------------'
     logf(txt1,log_file)    
