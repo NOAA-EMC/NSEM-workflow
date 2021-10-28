@@ -29,10 +29,11 @@ from datetime import datetime
 import cartopy	
 import cartopy.crs as ccrs	
 import cartopy.feature as cfeature
+from cartopy.mpl.gridliner import LONGITUDE_FORMATTER, LATITUDE_FORMATTER
 
 NSEMdir = os.environ['NSEMdir']
 RUNdir = os.getenv('RUNdir')
-PARMnsem = os.getenv('PARMnsem')
+PARMnsem = os.environ['PARMnsem']
 FIXnsem = os.getenv('FIXnsem')
 USHnsem = os.getenv('USHnsem')
 STORM = os.getenv('STORM')
@@ -40,6 +41,10 @@ COMINobs = os.getenv('COMINobs')
 sys.path.append(USHnsem)
 import nsem_ttest
 import nsem_utils
+
+cartopy.config['pre_existing_data_dir'] = NSEMdir+'/lib/cartopy'
+print('Reading cartopy shapefiles from:')
+print(cartopy.config['pre_existing_data_dir'])
 
 sys.path.append(PARMnsem+'/storms/'+STORM)
 import base_info
@@ -60,35 +65,51 @@ def run_ttest(model, obs, label, units):
 
    # Bar chart
    plt.figure(figsize = [6.4, 3.8])
+   plt.rc('xtick',labelsize=8)
+   plt.rc('ytick',labelsize=8)
    plt.bar(model.columns[:],p_array)
    plt.axhline(y=0.05,linewidth=1, color='r')
    plt.yscale('log')
-   plt.rc('xtick',labelsize=3)
    plt.xticks(rotation=90)
-   plt.rc('ytick',labelsize=3)
    plt.xlabel("Stations",fontsize=9)
    plt.ylabel("p-value (Prob of falsely rejecting H0, while true)",fontsize=9)
    plt.title(label,fontsize=11)
    plt.savefig(RUNdir+"/ttest_summary_"+label+".png",dpi=150,bbox_inches='tight',pad_inches=0.1)
    
-   """
    # Map display
-   landbound = np.loadtxt(USHnsem+'/coastal_bound_high.txt')
-   locations = pd.read_csv(RUNdir+'/ndbc_locations.txt', delim_whitespace=True)
-   
-   fig, ax = plt.subplots(figsize = [6.5, 5.5])
-   plt.scatter(locations.iloc[:,2], locations.iloc[:,1], c=success_array, cmap='bwr_r')
-    
-   for i, txt in enumerate(locations.iloc[:,0]):
-      ax.annotate(txt, (locations.iloc[i,2],locations.iloc[i,1]))
-   plt.plot(landbound[:,0]-360., landbound[:,1], 'k', linewidth=1.0)
-   plt.xlim([-90.00, -60.00])
-   plt.ylim([10.00, 37.00])
-   plt.rc('xtick',labelsize=14)
-   plt.rc('ytick',labelsize=14)
-   plt.title(label,fontsize=11)
+   if label=="ATM":
+      stations = pd.read_csv(PARMnsem+'/storms/'+STORM+'/StationsWind.csv', header='infer', index_col="coordinate") 
+   if label=="WW3":
+      stations = pd.read_csv(PARMnsem+'/storms/'+STORM+'/StationsHs.csv', header='infer', index_col="coordinate")
+   if label=="ADC":
+      stations = pd.read_csv(PARMnsem+'/storms/'+STORM+'/StationsWLV.csv', header='infer', index_col="coordinate")
+   besttrack = pd.read_csv(PARMnsem+'/storms/'+STORM+'/best_track.txt', header=None, skiprows=4, delim_whitespace=True)
+
+   ax = plt.axes(projection=ccrs.PlateCarree())
+   ax.set_extent([base_info.lonmin_plot_landfall, base_info.lonmax_plot_landfall, 
+                  base_info.latmin_plot_landfall, base_info.latmax_plot_landfall], ccrs.PlateCarree())
+   coast = cfeature.GSHHSFeature(scale='high',edgecolor='black',facecolor='none',linewidth=0.25)	
+   ax.add_feature(coast)
+   for i, txt in enumerate(stations.columns):
+      ax.annotate(txt, (stations.iloc[0,i]+0.05, stations.iloc[1,i]+0.05), fontsize=8)
+      if success_array[i]==1:
+         plt.plot(stations.iloc[0,i], stations.iloc[1,i],  markersize=4, marker='o', color='red')
+      else:
+         plt.plot(stations.iloc[0,i], stations.iloc[1,i],  markersize=4, marker='o', color='blue')
+   plt.plot(besttrack.iloc[:,3].values, besttrack.iloc[:,2].values, 'k--', linewidth=1.0)
+   gl = ax.gridlines(crs=ccrs.PlateCarree(), draw_labels=True,
+                     linewidth=2, color='gray', alpha=0.5, linestyle=None)
+   gl.xlabels_top = False
+   gl.ylabels_right = False
+   gl.xlines = False
+   gl.ylines = False
+   gl.xformatter = LONGITUDE_FORMATTER
+   gl.yformatter = LATITUDE_FORMATTER
+   gl.xlabel_style = {'size': 7, 'color': 'black'}
+   gl.ylabel_style = {'size': 7, 'color': 'black'}
+   figtitle = units+' 90% accuracy assessment'
+   plt.title(figtitle)
    plt.savefig(RUNdir+"/ttest_map_"+label+".png",dpi=150,bbox_inches='tight',pad_inches=0.1)
-   """
 
    return p_array, success_array
 
@@ -170,6 +191,7 @@ model = pd.read_csv(RUNdir+'/ModelWLV.csv', header='infer')
 obs = pd.read_csv(RUNdir+'/ObsWLV.csv', header='infer')
 obs = obs[obs < 99.00]
 obs = obs.fillna(method='ffill')
+model = model.fillna(method='ffill')
 label = "ADC"
 units = "WL (m MSL)"
 mask = (model['Date'] > base_info.analysis_start_date.strftime('%Y-%m-%d')) & (model['Date'] <= base_info.analysis_end_date.strftime('%Y-%m-%d'))
@@ -180,8 +202,10 @@ obs = obs.loc[mask]
 obs.set_index('DATE', inplace=True)
 print(model.head(20))
 print(model.tail(20))
-print(obs.head(20))
+print(obs.head(52))
 print(obs.tail(20))
+obs.to_csv(RUNdir+"/ObsWLV_check.csv")
+model.to_csv(RUNdir+"/ModelWLV_check.csv")
 p_array, success_array = run_ttest(model, obs, label, units)
 wlv_best = model.columns[np.argmax(p_array)+1]  # First column is the date
 wlv_worst = model.columns[np.argmin(p_array)+1]  # First column is the date
