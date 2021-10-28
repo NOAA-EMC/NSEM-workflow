@@ -14,9 +14,13 @@
 #SBATCH --job-name=jnsem_fcst
 #SBATCH -q batch
 #SBATCH --time=08:00:00
-#SBATCH --ntasks=23
-##SBATCH --ntasks=1440
+##SBATCH --ntasks=23
+#SBATCH --ntasks=1440
+##SBATCH --ntasks=2160
+##SBATCH --ntasks=720
+##SBATCH --ntasks=385
 ##SBATCH --nodes=120
+##SBATCH --nodes=60
 #SBATCH --mem 300000
 #SBATCH --cpus-per-task=1            # Number of cores per MPI rank (for hyperthreading)
 ##SBATCH --nodes=121                  # Number of nodes
@@ -26,7 +30,12 @@
 #SBATCH --output=jnsem_forecast.out.log
 #SBATCH --error=jnsem_forecast.err.log
 
-source ${ROOTDIR}/modulefiles/hera/ESMF_NUOPC
+#source ${ROOTDIR}/modulefiles/hera/ESMF_NUOPC
+source ${ROOTDIR}/modulefiles/envmodules_intel.hera
+#source /scratch2/COASTAL/coastal/save/Andre.VanderWesthuysen/ADC-WW3-NWM-NEMS/modulefiles/hera/ESMF_NUOPC
+#module load intel/19.0.5.281
+#module load wgrib2/2.0.8
+#module load nco/4.9.1
 
 module list
 
@@ -57,6 +66,10 @@ export jobid=pnsem_forecast.$$
 export NWROOT=${NSEMdir}
 
 ${NWROOT}/jobs/J${MODEL}_FORECAST
+
+# Get memory usage report
+# NOTE: To do this interactively on the comaand line, use $report-mem -j $jobid
+report-mem
 
 #%manual
 ################################################################################
