@@ -30,6 +30,7 @@ from scipy import stats
 from sklearn.linear_model import LinearRegression
 from sklearn import metrics
 import matplotlib.pyplot as plt
+import matplotlib.ticker as ticker
 import matplotlib.dates as mdates
 from matplotlib.dates import DateFormatter
 
@@ -39,6 +40,7 @@ def test_90_accuracy(model, observations, plotflag=False, direc="", label="model
 
    obs1 = observations
    mod1 = model 
+   print('In test_90_accuracy:')
    print(obs1.head(20))
    print(obs1.tail(20))
    print(mod1.head(20))
@@ -113,6 +115,19 @@ def test_90_accuracy(model, observations, plotflag=False, direc="", label="model
    #print("Range of rel_d2 = ["+str(min((mod2-obs2)/obs2))+", "+str(max((mod2-obs2)/obs2))+"]")
 
    """
+   plotframe = pd.concat([obs1, mod1], axis=1)
+   plotframe.index = pd.to_datetime(plotframe.index,format="%Y-%m-%d %H:%M:%S")
+   #plotframe.set_index('Date', inplace=True)
+   print(plotframe.head(20))
+   print(type(plotframe))
+   ax = plotframe.plot(figsize=(10,2))
+   ticklabels = plotframe.index.strftime('%Y-%m-%d')
+   ax.xaxis.set_major_formatter(ticker.FixedFormatter(ticklabels))
+   ax.yaxis.set_major_formatter(ticker.FormatStrFormatter('%.2f'))
+   plt.savefig(direc+"/ttest_ts_"+label+".png",dpi=150,bbox_inches='tight',pad_inches=0.1)
+   """
+
+   """
    # Plot the time series
    if plotflag:
       plt.clf()
@@ -170,17 +185,17 @@ def test_90_accuracy(model, observations, plotflag=False, direc="", label="model
       plt.clf()
       #fig, axs = plt.subplots(2)
       fig = plt.figure(figsize=(20,4), dpi=300)
-      plt.plot(obs1, 'k-o', markerfacecolor='w', markeredgecolor='k', markersize=3, label='Observations')
-      plt.plot(mod1, 'b-', label='Model')
+      #ax = fig.add_subplot(111)
+      plt.plot(obs1.index, obs1, 'k-o', markerfacecolor='w', markeredgecolor='k', markersize=3, label='Observations')
+      plt.plot(mod1.index,mod1, 'b-', label='Model')
       plt.plot(plotscale*np.abs(mod1-obs1)/np.maximum(np.max(obs1),0.01), 'r-', label=plotlabel1)
-      print(np.mean(np.abs(mod1-obs1)/np.maximum(np.max(obs1),0.01)))
+      #print(np.mean(np.abs(mod1-obs1)/np.maximum(np.max(obs1),0.01)))
       plt.plot((plotscale*np.mean(np.abs(mod1-obs1)/np.maximum(np.max(obs1),0.01))+0.*obs1), 'r--', label=plotlabel2)
       plt.legend()
       plt.plot(0.9*obs1, 'k--', linewidth=0.5)
       plt.plot(1.1*obs1, 'k--', linewidth=0.5)
       plt.plot(0.0*mod1, 'k:', linewidth=0.5)
       plt.grid()
-      plt.ylabel(unit) 
       plt.title(label+": p-values = "+"{:.3f}".format(pvalue1))
       plt.ylim([min(1.2*min(min(obs1),min(mod1)), 0.), 1.2*max(max(obs1),max(mod1))])
       plt.xlabel("Date (MM-DD HH)")
@@ -223,8 +238,8 @@ def test_90_accuracy(model, observations, plotflag=False, direc="", label="model
       plt.text(0.15, 0.8, "Slope="+"{:.3f}".format(slope), transform=fig.transFigure, fontsize=12)
       plt.text(0.15, 0.7, "RMSE="+"{:.4f}".format(rmse), transform=fig.transFigure, fontsize=12)
       plt.text(0.15, 0.6, "SI="+"{:.4f}".format(si), transform=fig.transFigure, fontsize=12)
-      plt.savefig(direc+"/ttest_scatter_"+label+".png",dpi=150,bbox_inches='tight',pad_inches=0.1) 
-   
+      plt.savefig(direc+"/ttest_scatter_"+label+".png",dpi=150,bbox_inches='tight',pad_inches=0.1)  
+
    return success, pvalue1
 
 def test_90_accuracy_2part(model, observations, plotflag=False, direc="", label="model", unit="Value"):
