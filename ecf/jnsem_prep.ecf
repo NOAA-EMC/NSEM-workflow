@@ -15,13 +15,18 @@
 #SBATCH -q batch
 #SBATCH --time=00:30:00
 #SBATCH --ntasks=1
-#SBATCH --mem 64000M
+##SBATCH --mem 64000M
+#SBATCH --mem 300000M
 #SBATCH --mail-user=andre.vanderwesthuysen@noaa.gov
 #SBATCH --mail-type=ALL
 #SBATCH --output=jnsem_prep.out.log
 #SBATCH --error=jnsem_prep.err.log
 
-source ${ROOTDIR}/modulefiles/hera/ESMF_NUOPC
+#source ${ROOTDIR}/modulefiles/hera/ESMF_NUOPC
+source ${ROOTDIR}/modulefiles/envmodules_intel.hera
+#source /scratch2/COASTAL/coastal/save/Andre.VanderWesthuysen/ADC-WW3-NWM-NEMS/modulefiles/hera/ESMF_NUOPC
+#module load intel/19.0.5.281
+#module load wgrib2/2.0.8
 
 module list
 
@@ -31,7 +36,8 @@ export MODEL=${model^^}
 export envir="para"
 
 export DEVWCOSS_USER=$(whoami)
-export COMROOT=/scratch2/COASTAL/coastal/save/com
+#export COMROOT=/scratch2/COASTAL/coastal/save/com
+export COMROOT=/scratch2/NCEPDEV/stmp1/${USER}/data/com
 
 #Dev environment value for $job and $jobid
 export job=pnsem_prep
