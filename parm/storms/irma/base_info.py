@@ -45,15 +45,17 @@ run_option = os.getenv('RUN_TYPE')
 #----------------------------------
 #Date settings
 tide_spin_start_date   = datetime.datetime(2017,8,23,12,0,0) # this is also tde_ref_date (tide_fact calc)
-#tide_spin_end_date     = tide_spin_start_date + datetime.timedelta(days=12.5)
-#wave_spin_end_date     = tide_spin_start_date + datetime.timedelta(days=19.5)
+tide_spin_end_date     = tide_spin_start_date + datetime.timedelta(days=12.5)
+wave_spin_end_date     = tide_spin_start_date + datetime.timedelta(days=19.5)
 #final_end_date        = tide_spin_start_date + datetime.timedelta(days=23.5)
 
 #tide_spin_end_date     = tide_spin_start_date + datetime.timedelta(days=12.5)
 #wave_spin_end_date     = tide_spin_start_date + datetime.timedelta(days=16.5)
+#wave_spin_end_date     = tide_spin_start_date + datetime.timedelta(days=15.5)
 
-tide_spin_end_date     = tide_spin_start_date + datetime.timedelta(days=16.5)
-wave_spin_end_date     = tide_spin_start_date + datetime.timedelta(days=19.5)
+#tide_spin_end_date     = tide_spin_start_date + datetime.timedelta(days=16.5)
+#tide_spin_end_date     = tide_spin_start_date + datetime.timedelta(days=15.5)
+#wave_spin_end_date     = tide_spin_start_date + datetime.timedelta(days=19.5)
 
 # Folders
 #main_run_dir    = '/scratch4/COASTAL/coastal/noscrub/Saeed.Moghimi/stmp5/'   # IKE test cases
@@ -66,11 +68,32 @@ wave_spin_end_date     = tide_spin_start_date + datetime.timedelta(days=19.5)
 
 mesh = 'hsofs'
 
+# Plotting domains
+lonmin_plot_full=-100.00
+lonmax_plot_full=-50.00
+latmin_plot_full=5.00
+latmax_plot_full=50.00
+lonmin_plot_regional=-85.00
+lonmax_plot_regional=-70.00
+latmin_plot_regional=18.00
+latmax_plot_regional=30.00
+lonmin_plot_landfall=-85.00
+lonmax_plot_landfall=-78.50
+latmin_plot_landfall=23.00
+latmax_plot_landfall=29.50
+
+# Interval for 90% accuracy analysis
+#analysis_start_date   = datetime.datetime(2017,9,5,0,0,0)
+analysis_start_date   = datetime.datetime(2017,9,8,0,0,0)
+analysis_end_date   = datetime.datetime(2017,9,12,0,0,0)
+#analysis_end_date   = datetime.datetime(2017,9,13,0,0,0)
+
 #atm_inp_dir     = 'hsofs_forcings/ike_v2_7settings/inp_atmesh'     
 #wav_inp_dir     = 'hsofs_forcings/ike_v2_7settings/inp_wavdata' 
    
 #wave and atm files are 
 atm_netcdf_file_names = np.array([
+#     'IRMA_HWRF_HSOFS_Nov2018.wrfles.nc',
     'IRMA_HWRF_HSOFS_Nov2018.nc',
     ])
     
@@ -220,9 +243,10 @@ elif run_option == 'atm2wav2ocn':
     dt              = 2.0   #######2.0    
     ndays           = (end_date - start_date).total_seconds() / 86400.  #duration in days
     #fort15 options
-    ndays_ramp      = 5.0
+    #AW ndays_ramp      = 5.0
+    ndays_ramp      = '7.000 0.000 0.000 0.000 7.000 7.000 1.000 0.000 7.000'    
     nws             = 517       # atm  Deprecated
-    ihot            = 568
+    ihot            = 567
     hot_ndt_out     = ndays * 86400 / dt
     hot_wave_out    = (wave_spin_end_date - tide_spin_end_date).total_seconds()
 else:
