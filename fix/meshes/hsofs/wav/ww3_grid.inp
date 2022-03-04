@@ -28,7 +28,7 @@ $     maximum global time step, maximum CFL time step for x-y and
 $     k-theta, minimum source term time step (all in seconds).
 $
 $
-   600. 600. 600. 600.                              
+   600. 600. 600. 600.                       
 $
 $ Start of namelist input section ------------------------------------ $
 $   Starting with WAVEWATCH III version 2.00, the tunable parameters
@@ -42,7 +42,7 @@ $
 &SLN1 CLIN =  80.0, RFPM =  1.00, RFHF =  0.50 /
 $
 &SIN4 ALPHA0=0.0095,
-  BETAMAX=1.33,
+  BETAMAX=2.00,
   SINTHP=2.00,
   Z0MAX=0.00,
   ZALP=0.006,
@@ -58,35 +58,37 @@ $
   SWELLF7 =230000.000,
   Z0RAT =0.0400 /
 $
+$&SIN4 BETAMAX = 1.55, ZALP=0.006, ZWND = 5.,
+$Z0MAX = 0.0020, SINTHP=2.0, SWELLFPAR = 3, SWELLF = 0.80,
+$TAUWSHELTER = 0.0, SWELLF2=-0.018, SWELLF3= 0.015, Z0RAT = 0.04,
+$SWELLF4 = 100000, SWELLF5 = 1.2 /
+$
 $ Implicit with ww3ifr code version
-&UNST
-UGOBCAUTO = F
-UGOBCDEPTH= -10.
-EXPFSN = F,
-EXPFSPSI = F,
-EXPFSFCT = F,
-IMPFSN = F,
-IMPTOTAL = T,
-IMPREFRACTION = T,
-IMPFREQSHIFT = T,
-IMPSOURCE = F,
-SETUP_APPLY_WLV = F
-SOLVERTHR_SETUP=1E-14
-CRIT_DEP_SETUP=0.1
-JGS_USE_JACOBI = T,
-JGS_NLEVEL = 0
-JGS_SOURCE_NONLINEAR = F
-JGS_BLOCK_GAUSS_SEIDEL = T,
-JGS_TERMINATE_MAXITER = T,
-JGS_MAXITER = 100000,
-JGS_TERMINATE_NORM = F,
-JGS_TERMINATE_DIFFERENCE = T,
-JGS_DIFF_THR = 1.E-6,
-JGS_PMIN = 3.0
-JGS_LIMITER = F,
-JGS_BLOCK_GAUSS_SEIDEL = T
-JGS_NORM_THR = 1.E-6
-/
+&UNST UGOBCAUTO = F,
+  UGOBCDEPTH= -10., 
+  EXPFSN = F,
+  EXPFSPSI = F,
+  EXPFSFCT = F,
+  IMPFSN = F,
+  EXPTOTAL = F,
+  IMPTOTAL = T,
+  IMPREFRACTION = T,
+  IMPFREQSHIFT = T,
+  IMPSOURCE = T,
+  SETUP_APPLY_WLV = F,
+  SOLVERTHR_SETUP=1E-14,
+  CRIT_DEP_SETUP=0.1,
+  JGS_USE_JACOBI = T,
+  JGS_BLOCK_GAUSS_SEIDEL = T,
+  JGS_TERMINATE_MAXITER = T,
+  JGS_MAXITER = 1000,
+  JGS_TERMINATE_NORM = F,
+  JGS_TERMINATE_DIFFERENCE = T,
+  JGS_DIFF_THR = 1.E-8,
+  JGS_PMIN = 3.0,
+  JGS_LIMITER = F,
+  JGS_NORM_THR = 1.E-20 /
+$
 $ Bottom friction  - - - - - - - - - - - - - - - - - - - - - - - - - -
 $   JONSWAP             : Namelist SBT1
 $                           GAMMA   : As it says.
@@ -136,44 +138,11 @@ $                                     4 : Like 2 with cont. ice.
 $                           XP, XR, XFILT
 $                                    Xp, Xr and Xf for the dynamic
 $                                    integration scheme.
+&REF1 REFCOAST=0.1  /
 $
 $ In the 'Out of the box' test setup we run with sub-grid obstacles 
 $ and with continuous ice treatment.
 $
-$
-&SNL1 LAMBDA =  0.250, NLPROP = 0.250E+08, KDCONV =  0.750, KDMIN =  0.500,
-        SNLCS1 =  5.500, SNLCS2 =  0.833, SNLCS3 =  -1.250 /
-$&SDS4 SDSC1 =  0.0000E+00, SDSC2 = -0.2200E-04, SDSCUM = -0.4034E+00,
-$        SDSC4 =  0.1000E+01, SDSC5 =  0.0000E+00, SDSC6 =  0.3000E+00,
-$        WNMEANP =0.50, FXPM3 =4.00,FXFM3 =9.90,
-$        SDSBINT =  0.3000E+00, SDSBCK =  0.0000E+00, SDSABK = 1.500, SDSPBK = 4.000,
-$        SDSHCK = 1.50, SDSBR =   0.9000E-03, SDSSTRAIN = 0.000,
-$        SDSBR2 = 0.80, SDSP = 2.00, SDSISO = 2, SDSCOS =2.0, SDSDTH = 80.0,
-$        SDSBRF1 =  0.50, SDSBRFDF = 0,
-$        SDSBM0 =  1.00, SDSBM1 = 0.00, SDSBM2 = 0.00, SDSBM3 = 0.00, SDSBM4 = 0.00,
-$,       WHITECAPWIDTH = 0.30, SDSLFGEN =  0.00, SDSHFGEN =  0.00 /
-&SBT1 GAMMA = -0.6700E-01 /
-&SDB1 BJALFA =  1.000, BJGAM =  0.730, BJFLAG = .TRUE. /
-&PRO3 CFLTM = 0.70, WDTHCG = 1.50, WDTHTH = 1.50 /
-&OUTS P2SF  = 0, I1P2SF = 1, I2P2SF = 15,
-        US3D  = 0, I1US3D =  1, I2US3D = 32,
-        E3D   = 0, I1E3D  =  1, I2E3D  = 32,
-        TH1MF = 0, I1TH1M =  1, I2TH1M = 32,
-        STH1MF= 0, I1STH1M=  1, I2STH1M= 32,
-        TH2MF = 0, I1TH2M =  1, I2TH2M = 32,
-        STH2MF= 0, I1STH2M=  1, I2STH2M= 32 /
-&MISC CICE0 = 0.500, CICEN = 0.500, LICE =      0.0, PMOVE = 0.500,
-        XSEED = 1.000, FLAGTR = 0, XP = 0.150, XR = 0.100, XFILT = 0.050
-        IHM =  100, HSPM = 0.050, WSM = 1.700, WSC = 0.333, FLC = .TRUE.
-        NOSW =  5, FMICHE = 1.600, RWNDC = 1.000,
-        FACBERG = 1.0, GSHIFT =   0.000E+00 /
-$
-$
-$AW021317 &MISC P2SF = 1 ,I1P2SF = 2, I2P2SF = 16 /
-$&REF1 REFCOAST=0.1 /
-$&REF1 REFCOAST=0.10, REFSLOPE=0.1, REFCOSP_STRAIGHT=4, REFFREQ=1., REFSUBGRID = 0.00  /
-&REF1 REFCOAST=0.10, REFSLOPE=0.1, REFCOSP_STRAIGHT=4, REFFREQ=1., REFSUBGRID = 0.00  /
-&SIN4 BETAMAX = 1.33 /
 $
 $ Mandatory string to identify end of namelist input section.
 $
@@ -279,12 +248,192 @@ $     connect flag. If this flag is true, and the present and previous
 $     point are on a grid line or diagonal, all intermediate points
 $     are also defined as boundary points.
 $
-$   1     1  F
-$   292    1   T
-$   154    1  T
-$     239   1  T
-$      2   1  F
-$     59   1  T
+1086001  1  F
+1092044  1  F
+1098147  1  F
+1104236  1  F
+1110379  1  F
+1116514  1  F
+1122758  1  F
+1129136  1  F
+1135525  1  F
+1142000  1  F
+1148509  1  F
+1155060  1  F
+1161621  1  F
+1168213  1  F
+1174813  1  F
+1181443  1  F
+1188081  1  F
+1194733  1  F
+1201386  1  F
+1207973  1  F
+1214553  1  F
+1221067  1  F
+1227571  1  F
+1234023  1  F
+1240514  1  F
+1247034  1  F
+1253555  1  F
+1260084  1  F
+1266521  1  F
+1272928  1  F
+1279322  1  F
+1285645  1  F
+1291843  1  F
+1297952  1  F
+1304015  1  F
+1309949  1  F
+1315765  1  F
+1321465  1  F
+1327071  1  F
+1332500  1  F
+1337855  1  F
+1343131  1  F
+1348234  1  F
+1353226  1  F
+1358127  1  F
+1358139  1  F
+1358148  1  F
+1358147  1  F
+1358146  1  F
+1358145  1  F
+1358144  1  F
+1358143  1  F
+1358142  1  F
+1358141  1  F
+1358140  1  F
+1358126  1  F
+1358125  1  F
+1358124  1  F
+1358123  1  F
+1358122  1  F
+1358121  1  F
+1358120  1  F
+1358119  1  F
+1358118  1  F
+1358117  1  F
+1358116  1  F
+1358115  1  F
+1358114  1  F
+1358113  1  F
+1358180  1  F
+1363017  1  F
+1367754  1  F
+1367755  1  F
+1372409  1  F
+1377020  1  F
+1381552  1  F
+1385969  1  F
+1390321  1  F
+1394564  1  F
+1398704  1  F
+1402735  1  F
+1402734  1  F
+1402733  1  F
+1406676  1  F
+1410509  1  F
+1414256  1  F
+1417956  1  F
+1417955  1  F
+1417954  1  F
+1421600  1  F
+1425168  1  F
+1425167  1  F
+1425166  1  F
+1428671  1  F
+1432125  1  F
+1435570  1  F
+1438970  1  F
+1442336  1  F
+1445702  1  F
+1445703  1  F
+1449024  1  F
+1452282  1  F
+1452281  1  F
+1455518  1  F
+1458706  1  F
+1458705  1  F
+1461862  1  F
+1465000  1  F
+1464999  1  F
+1464998  1  F
+1468123  1  F
+1471218  1  F
+1471219  1  F
+1474265  1  F
+1477303  1  F
+1477302  1  F
+1477301  1  F
+1477300  1  F
+1477299  1  F
+1477298  1  F
+1477297  1  F
+1477296  1  F
+1474272  1  F
+1471223  1  F
+1468125  1  F
+1468124  1  F
+1464994  1  F
+1461858  1  F
+1461859  1  F
+1458703  1  F
+1458700  1  F
+1458699  1  F
+1455516  1  F
+1455515  1  F
+1455496  1  F
+1455495  1  F
+1452266  1  F
+1452265  1  F
+1449011  1  F
+1449010  1  F
+1445699  1  F
+1445698  1  F
+1442335  1  F
+1442334  1  F
+1442333  1  F
+1442332  1  F
+1438969  1  F
+1435569  1  F
+1435568  1  F
+1435566  1  F
+1432124  1  F
+1432122  1  F
+1432121  1  F
+1428670  1  F
+1428669  1  F
+1428668  1  F
+1428667  1  F
+1425165  1  F
+1421599  1  F
+1421598  1  F
+1421597  1  F
+1421595  1  F
+1417953  1  F
+1417952  1  F
+1414255  1  F
+1410508  1  F
+1410507  1  F
+1410506  1  F
+1407297  1  F
+1403355  1  F
+1399306  1  F
+1395166  1  F
+1395165  1  F
+1390920  1  F
+1386562  1  F
+1386561  1  F
+1386560  1  F
+1382101  1  F
+1377571  1  F
+1372954  1  F
+1368283  1  F
+1363549  1  F
+1358703  1  F
+1353770  1  F
+1348770  1  F
+1343645  1  F
 $
 $  Close list by defining point (0,0) (mandatory)
 $
