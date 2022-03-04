@@ -32,7 +32,8 @@ avail_options = [
     'atm2ocn',
     'wav2ocn',
     'atm&wav2ocn', 
-    'atm2wav2ocn'   
+    'atm2wav2ocn',
+    'atm2wav-ocn'  
     ]
 
 #Choose one option based on avail_options 
@@ -49,11 +50,23 @@ tide_spin_start_date   = datetime.datetime(2018,8,27,18,0,0) # this is also tde_
 #wave_spin_end_date     = tide_spin_start_date + datetime.timedelta(days=34.0)
 #final_end_date        = tide_spin_start_date + datetime.timedelta(days=23.5)
 
+tide_spin_end_date     = tide_spin_start_date + datetime.timedelta(days=12.5)
+wave_spin_end_date     = tide_spin_start_date + datetime.timedelta(days=20.5)
+
 #tide_spin_end_date     = tide_spin_start_date + datetime.timedelta(days=12.5)
 #wave_spin_end_date     = tide_spin_start_date + datetime.timedelta(days=16.5)
 
-tide_spin_end_date     = tide_spin_start_date + datetime.timedelta(days=16.5)
-wave_spin_end_date     = tide_spin_start_date + datetime.timedelta(days=20.5)
+#tide_spin_end_date     = tide_spin_start_date + datetime.timedelta(days=16.5)
+#wave_spin_end_date     = tide_spin_start_date + datetime.timedelta(days=20.5)
+
+#tide_spin_end_date     = tide_spin_start_date + datetime.timedelta(days=12.5)
+#wave_spin_end_date     = tide_spin_start_date + datetime.timedelta(days=15.0)
+
+#tide_spin_end_date     = tide_spin_start_date + datetime.timedelta(days=15.0)
+#wave_spin_end_date     = tide_spin_start_date + datetime.timedelta(days=17.5)
+
+#tide_spin_end_date     = tide_spin_start_date + datetime.timedelta(days=17.5)
+#wave_spin_end_date     = tide_spin_start_date + datetime.timedelta(days=20.0)
 
 # Folders
 #main_run_dir    = '/scratch4/COASTAL/coastal/noscrub/Saeed.Moghimi/stmp5/'   # IKE test cases
@@ -66,12 +79,42 @@ wave_spin_end_date     = tide_spin_start_date + datetime.timedelta(days=20.5)
 
 mesh = 'hsofs'
 
+# Plotting domains
+lonmin_plot_full=-100.00
+lonmax_plot_full=-50.00
+latmin_plot_full=5.00
+latmax_plot_full=50.00
+lonmin_plot_regional=-84.00
+lonmax_plot_regional=-64.00
+latmin_plot_regional=24.00
+latmax_plot_regional=42.00
+lonmin_plot_landfall=-80.40
+lonmax_plot_landfall=-74.75
+latmin_plot_landfall=32.50
+latmax_plot_landfall=36.60
+#lonmin_plot_landfall=-77.20
+#lonmax_plot_landfall=-77.05
+#latmin_plot_landfall=34.55
+#latmax_plot_landfall=34.70
+
+# Interval for 90% accuracy analysis
+#analysis_start_date   = datetime.datetime(2018,9,9,6,0,0)
+analysis_start_date   = datetime.datetime(2018,9,12,0,0,0)
+#analysis_end_date   = datetime.datetime(2018,9,17,0,0,0)
+#analysis_end_date   = datetime.datetime(2018,9,15,0,0,0)
+analysis_end_date   = datetime.datetime(2018,9,16,5,0,0)
+
+   #reflon=np.linspace(-75.70, -71.05, 1000)
+   #reflat=np.linspace(38.50, 41.40, 1000)
+
 #atm_inp_dir     = 'hsofs_forcings/ike_v2_7settings/inp_atmesh'     
 #wav_inp_dir     = 'hsofs_forcings/ike_v2_7settings/inp_wavdata' 
    
 #wave and atm files are 
 atm_netcdf_file_names = np.array([
+#    'Florence_HWRF_HRRR_HSOFS.wrfles.nc',
     'Florence_HWRF_HRRR_HSOFS.nc',
+#    'windOut-Florence.nc4',
     ])
     
 wav_netcdf_file_names = np.array([
@@ -112,7 +155,7 @@ elif run_option == 'tide_baserun':
     #fort15 options
     ndays_ramp      = 5.0
     nws             = 0        # atm  Deprecated
-    ihot            = 567
+    ihot            = 67
     hot_ndt_out     = ndays * 86400 / dt    
 elif run_option == 'best_track2ocn':    
     Ver             = 'v2.0' 
@@ -164,7 +207,8 @@ elif run_option == 'atm2ocn':
     dt              = 2.0    
     ndays           = (end_date - start_date).total_seconds() / 86400.  #duration in days
     #fort15 options
-    ndays_ramp      = 5.0
+    #AW ndays_ramp      = 5.0
+    ndays_ramp      = '7.000 0.000 0.000 0.000 7.000 7.000 1.000 0.000 7.000'
     nws             = 17       # atm  Deprecated
     ihot            = 567
     hot_ndt_out     = ndays * 86400 / dt    
@@ -185,7 +229,28 @@ elif run_option == 'wav2ocn':
     ndays_ramp      = 5.0
     nws             = 500       # atm  Deprecated
     ihot            = 567
-    hot_ndt_out     = ndays * 86400 / dt    
+    hot_ndt_out     = ndays * 86400 / dt 
+elif run_option == 'atm2wav':    
+    Ver             = 'v1.0_7t' 
+    RunName         = 'a57_IKE_ATM2WAV'            # Goes to qsub job name
+    #inp files
+    fort15_temp     = ''           
+    ww3_multi_tmpl  = 'ww3_multi.inp.sbs.tmpl'
+    ww3_ounf_tmpl   = 'ww3_ounf.inp.tmpl'
+    wbound_flg      = True
+    wbound_type     = 'nc'
+    #Time
+    start_date      = tide_spin_start_date  #current time is set by hotfile therefore we should use the same start time as 1st spinup
+    start_date_nems = tide_spin_end_date
+    end_date        = wave_spin_end_date
+    dt              = 2.0   #######2.0    
+    ndays           = (end_date - start_date).total_seconds() / 86400.  #duration in days
+    #fort15 options
+    ndays_ramp      = 5.0
+    nws             = 517       # atm  Deprecated
+    ihot            = 567
+    hot_ndt_out     = ndays * 86400 / dt
+    hot_wave_out    = (wave_spin_end_date - tide_spin_end_date).total_seconds()   
 elif run_option == 'atm&wav2ocn':    
     Ver             = 'v1.0_7t' 
     RunName         = 'a57_IKE_ATM_WAV2OCN'            # Goes to qsub job name
@@ -220,9 +285,32 @@ elif run_option == 'atm2wav2ocn':
     dt              = 2.0   #######2.0    
     ndays           = (end_date - start_date).total_seconds() / 86400.  #duration in days
     #fort15 options
-    ndays_ramp      = 5.0
+    #AW ndays_ramp      = 5.0
+    ndays_ramp      = '7.000 0.000 0.000 0.000 7.000 7.000 1.000 0.000 7.000'
     nws             = 517       # atm  Deprecated
-    ihot            = 568
+    ihot            = 567
+    hot_ndt_out     = ndays * 86400 / dt
+    hot_wave_out    = (wave_spin_end_date - tide_spin_end_date).total_seconds()
+elif run_option == 'atm2wav-ocn':    
+    Ver             = 'v1.0_7t' 
+    RunName         = 'a57_IKE_ATM_WAV2OCN'            # Goes to qsub job name
+    #inp files
+    fort15_temp     = 'fort.15.template.atm2ocn'           
+    #fetch_hot_from  = main_run_dir + '/a21_IKE_OCN_SPINUP_v1.0/rt_20170712_h16_m12_s57r072/'
+    ww3_multi_tmpl  = 'ww3_multi.inp.sbs.tmpl'
+    ww3_ounf_tmpl   = 'ww3_ounf.inp.tmpl'
+    wbound_flg      = True
+    wbound_type     = 'nc'
+    #Time
+    start_date      = tide_spin_start_date  #current time is set by hotfile therefore we should use the same start time as 1st spinup
+    start_date_nems = tide_spin_end_date
+    end_date        = wave_spin_end_date
+    dt              = 2.0   #######2.0    
+    ndays           = (end_date - start_date).total_seconds() / 86400.  #duration in days
+    #fort15 options
+    ndays_ramp      = 5.0
+    nws             = 17       # atm  Deprecated
+    ihot            = 567
     hot_ndt_out     = ndays * 86400 / dt
     hot_wave_out    = (wave_spin_end_date - tide_spin_end_date).total_seconds()
 else:
@@ -257,6 +345,20 @@ elif run_option == 'atm2ocn':
     #
     coupling_interval_sec      = 3600
     #
+elif run_option == 'atm2wav':    
+    #NEMS settings
+    nems_configure  = 'nems.configure.atm_wav.IN' 
+    #
+    atm_name     = 'atmesh' 
+    atm_petlist  = '0 0'
+    #
+    ocn_name     = None
+    # 
+    wav_name     = 'ww3'
+    wav_petlist  = '1 719' 
+    #  
+    coupling_interval_sec      = 3600 
+    #
 elif run_option in ['wav2ocn','wav&best_track2ocn']:    
     #NEMS settings
     nems_configure   = 'nems.configure.wav_ocn.IN' 
@@ -289,6 +391,22 @@ elif run_option == 'atm&wav2ocn':
 elif run_option == 'atm2wav2ocn':    
     #NEMS settings
     nems_configure  = 'nems.configure.atm_ocn_wav_1loop.IN' 
+    #
+    atm_name     = 'atmesh' 
+    atm_petlist  = '0 0'
+    #
+    ocn_name     = 'adcirc'
+    ocn_petlist  = '1 720'
+    # 
+    wav_name     = 'ww3'
+    wav_petlist  = '721 1439' 
+    #wav_petlist  = '721 2159'
+    #  
+    coupling_interval_sec      = 900 
+    #
+elif run_option == 'atm2wav-ocn':    
+    #NEMS settings
+    nems_configure  = 'nems.configure.atm_ocn_wav_sbs.IN' 
     #
     atm_name     = 'atmesh' 
     atm_petlist  = '0 0'
